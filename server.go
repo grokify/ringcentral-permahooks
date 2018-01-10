@@ -16,7 +16,7 @@ import (
 
 	rc "github.com/grokify/go-ringcentral/client"
 	rcu "github.com/grokify/go-ringcentral/clientutil"
-	omr "github.com/grokify/oauth2more/ringcentral"
+	rco "github.com/grokify/oauth2more/ringcentral"
 )
 
 const (
@@ -171,12 +171,12 @@ func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err er
 
 func newRingCentralClient() (*rc.APIClient, error) {
 	return rcu.NewApiClient(
-		omr.ApplicationCredentials{
+		rco.ApplicationCredentials{
 			ServerURL:    os.Getenv("RINGCENTRAL_SERVER_URL"),
 			ClientID:     os.Getenv("RINGCENTRAL_CLIENT_ID"),
 			ClientSecret: os.Getenv("RINGCENTRAL_CLIENT_SECRET"),
 		},
-		omr.UserCredentials{
+		rco.UserCredentials{
 			Username:  os.Getenv("RINGCENTRAL_USERNAME"),
 			Extension: os.Getenv("RINGCENTRAL_EXTENSION"),
 			Password:  os.Getenv("RINGCENTRAL_PASSWORD"),
