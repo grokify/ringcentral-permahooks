@@ -68,7 +68,6 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "can't read body", http.StatusBadRequest)
 		return
 	}
-
 	log.Debug(string(body))
 
 	rcu := &rcu.Event{}
