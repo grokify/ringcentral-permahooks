@@ -35,6 +35,16 @@ $ vi .env
 $ go run server.go
 ```
 
+You can create and renew the webhook by calling the service. For example:
+
+```bash
+# Create Webhook
+$ curl -XGET 'https://12345678.ngrok.io/createhook'
+
+# Renew Webhook
+$ curl -XGET 'https://12345678.ngrok.io/renewhook'
+```
+
 ### Tunneling
 
 If your server is behind a NAT or a firewall and not accessible via the Internet, you can use a tunneling service such as [ngrok](https://ngrok.com/). In the following example, you would create a RingCentral webhook to `https://12345678.ngrok.io/webhook` which you would set as `PERMAHOOKS_INBOUND_WEBHOOK_URL` in your environment.
@@ -50,15 +60,22 @@ Version                       2.0.25/prod
 Region                        United States (us)                            
 Web Interface                 http://127.0.0.1:4040                            
 Forwarding                    http://12345678.ngrok.io -> localhost:8080       
-Forwarding                    https://12345678.ngrok.io -> localhost:8080                                             
-                     
+Forwarding                    https://12345678.ngrok.io -> localhost:8080
+
 Connections                   ttl     opn     rt1     rt5     p50     p90
                               83      0       0.00    0.00    18.68   301.08
 ```
 
+## To Do
+
+* Heroku deployment.
+
 ## Support
 
 If you have questions or support, please use the following resources:
+
+* Stack Overflow: https://stackoverflow.com/questions/tagged/ringcentral
+* GitHub: https://github.com/grokify/ringcentral-permahooks/issues
 
  [build-status-svg]: https://api.travis-ci.org/grokify/ringcentral-permahooks.svg?branch=master
  [build-status-link]: https://travis-ci.org/grokify/ringcentral-permahooks

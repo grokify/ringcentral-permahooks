@@ -19,8 +19,9 @@ import (
 )
 
 const (
-	ValidationTokenHeader = "Validation-Token"
-	SMSEventFilter        = "/restapi/v1.0/account/~/extension/~/message-store/instant?type=SMS"
+	ValidationTokenHeader    = "Validation-Token"
+	SMSEventFilter           = "/restapi/v1.0/account/~/extension/~/message-store/instant?type=SMS"
+	RenewalEventFilterFormat = "/restapi/v1.0/subscription/%s?threshold=%d&interval=%d"
 )
 
 var (
@@ -35,12 +36,11 @@ var (
 // EventFilters determines the RingCentral events this service will subscribe to.
 // Threshold is the threshold time (in seconds) remaining before subscription expiration when server should start to send renewal reminder notifications. This time is approximate. It cannot be less than the interval of reminder job execution. It also cannot be greater than a half of this subscription TTL.
 // Interval is the interval (in seconds) between reminder notifications. This time is approximate. It cannot be less than the interval of reminder job execution. It also cannot be greater than a half of threshold value.
-
 var RenewalEventFilter = GetRenewalEventFilter("~", RenewalThresholdTime, RenewalIntervalTime)
 var EventFilters = []string{SMSEventFilter, RenewalEventFilter}
 
-func GetRenewalEventFilter(s string, threshold, interval int) string {
-	return fmt.Sprintf("/restapi/v1.0/subscription/%s?threshold=%d&interval=%d", s, threshold, interval)
+func GetRenewalEventFilter(subscriptionID string, threshold, interval int) string {
+	return fmt.Sprintf(RenewalEventFilterFormat, subscriptionID, threshold, interval)
 }
 
 func SetEventFilters() {
@@ -88,7 +88,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Forward the body to the Webhook URL
 	resp, err := http.Post(
-		ForwardWebhookUrl,
+		OutboundWebhookUrl,
 		"application/json",
 		bytes.NewBuffer(body))
 	if err != nil {
@@ -125,7 +125,7 @@ func createWebhook() error {
 		EventFilters: EventFilters,
 		DeliveryMode: &rc.NotificationDeliveryModeRequest{
 			TransportType: "WebHook",
-			Address:       ThisWebhookUrl,
+			Address:       InboundWebhookUrl,
 		},
 		ExpiresIn: int32(ExpiresIn),
 	}
