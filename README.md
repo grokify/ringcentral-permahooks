@@ -11,20 +11,18 @@ This is a small app that turns RingCentral's expiring outbound webhooks into non
 * Automatically handles `Validation-Token`
 * Automatically handles RingCentral webhook renewal
 
-This is useful because RingCentral's webhook implementation has a couple of security features that are not supported by all webhook consuming services:
+This is useful because RingCentral's webhook implementation has a couple of features that are not supported by all webhook consuming services:
 
 * RingCentral requires the webhook endpoint return the request `Validation-Token` header in the response to indicate the receiving endpoint is the correct one.
 * RingCentral webhooks expire to ensure the correct site is receiving the information.
 
 However, some sites can only receive a simple webhook post without these features, this service converts RingCentral's webhooks into a simple webhook for these services.
 
-This service does a few things:
+Deployment options:
 
-* Creates a RingCentral webhook subscription
-* Handles the `Validation-Token` response
-* Renews the RingCentral webhook subscription
-
-To run locally, this example only needs `server.go`. The rest of the code is to run on Heroku.
+* Run locally: only the `server.go` file is necessary as shown below.
+* Heroku: currently in progress including `Procfile` and `Godeps` folder.
+* Lambda: TBD, but will likely use [eawsy/aws-lambda-go-shim](https://github.com/eawsy/aws-lambda-go-shim) like [Chathooks](https://github.com/grokify/chathooks)
 
 See more information about creating RingCentral webhooks here:
 
