@@ -24,6 +24,8 @@ This service does a few things:
 * Handles the `Validation-Token` response
 * Renews the RingCentral webhook subscription
 
+To run locally, this example only needs `server.go`. The rest of the code is to run on Heroku.
+
 See more information about creating RingCentral webhooks here:
 
 * API Reference: https://developer.ringcentral.com/api-docs/latest/index.html#!#RefCreateSubscription
