@@ -199,7 +199,7 @@ func main() {
 	InboundWebhookUrl = os.Getenv("PERMAHOOKS_INBOUND_WEBHOOK_URL")
 	OutboundWebhookUrl = os.Getenv("PERMAHOOKS_OUTBOUND_WEBHOOK_URL")
 
-	shortRenewal := true
+	shortRenewal := false // to verify if renewal is working.
 	if shortRenewal {
 		ExpiresIn = 180
 		RenewalThresholdTime = 80
