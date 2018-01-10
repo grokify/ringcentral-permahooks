@@ -1,22 +1,28 @@
-# RingCentral PermaHooks
+# RingCentral Permahooks
 
 [![Build Status][build-status-svg]][build-status-link]
 [![Go Report Card][goreport-svg]][goreport-link]
 [![Docs][docs-godoc-svg]][docs-godoc-link]
 [![License][license-svg]][license-link]
 
-This is a small app that turns RingCentral's expiring outbound webhooks into non-expiring webhooks. This is especially useful when connecting to a service with a simple inbound webhook implementation such as Zapier. This is useful because RingCentral's webhook implementation has a couple of security features that are not supported by all webhook consuming services:
+This is a small app that turns RingCentral's expiring outbound webhooks into non-expiring webhooks. This is especially useful when connecting to a service with a simple inbound webhook implementation such as Zapier and chat solutions like [Glip](https://glip.com). Benefits include:
 
-* RingCentral requires the webhook endpoint return the request `Validation-Token` header in the response.
+* Seamlessly links RingCentral Outbound Webhooks with Inbound Webhooks offered by Zapier, Glip and others.
+* Automatically handles `Validation-Token`
+* Automatically handles RingCentral webhook renewal
+
+This is useful because RingCentral's webhook implementation has a couple of security features that are not supported by all webhook consuming services:
+
+* RingCentral requires the webhook endpoint return the request `Validation-Token` header in the response to indicate the receiving endpoint is the correct one.
 * RingCentral webhooks expire to ensure the correct site is receiving the information.
 
-However, some sites can only receive a simple webhook post. This service an convert RingCentral's secure webhooks into a simple webhook for these services.
+However, some sites can only receive a simple webhook post without these features, this service converts RingCentral's webhooks into a simple webhook for these services.
 
 This service does a few things:
 
 * Creates a RingCentral webhook subscription
-* Renews the RingCentral webhook subscription
 * Handles the `Validation-Token` response
+* Renews the RingCentral webhook subscription
 
 See more information about creating RingCentral webhooks here:
 

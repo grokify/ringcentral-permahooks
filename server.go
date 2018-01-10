@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/grokify/gotilla/encoding/jsonutil"
@@ -19,6 +20,7 @@ import (
 )
 
 const (
+	DefaultPort              = "8080"
 	ValidationTokenHeader    = "Validation-Token"
 	SMSEventFilter           = "/restapi/v1.0/account/~/extension/~/message-store/instant?type=SMS"
 	RenewalEventFilterFormat = "/restapi/v1.0/subscription/%s?threshold=%d&interval=%d"
@@ -211,5 +213,10 @@ func main() {
 	http.Handle("/createhook", http.HandlerFunc(createhookHandler))
 	http.Handle("/renewhook", http.HandlerFunc(renewhookHandler))
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	port := os.Getenv("PORT")
+	if len(strings.TrimSpace(port)) == 0 {
+		port = DefaultPort
+	}
+
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
