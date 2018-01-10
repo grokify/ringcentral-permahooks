@@ -67,12 +67,12 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf(string(body))
+	log.Debug(string(body))
 
 	rcu := &rcu.Event{}
 	err = json.Unmarshal(body, rcu)
 	if err != nil {
-		log.Printf("JSON Unmarshal Error: %s", err.Error())
+		log.Warn("JSON Unmarshal Error: %s", err.Error())
 		return
 	}
 
@@ -80,7 +80,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	if rcu.Event == RenewalEventFilter {
 		err := renewWebhook()
 		if err != nil {
-			log.Printf("Error reading body: %v", err)
+			log.Warn("Error reading body: %v", err)
 			http.Error(w, "can't read body", http.StatusBadRequest)
 		}
 		return
