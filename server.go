@@ -102,15 +102,13 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createhookHandler(w http.ResponseWriter, r *http.Request) {
-	err := createWebhook()
-	if err != nil {
+	if err := createWebhook(); err != nil {
 		log.Printf(err.Error())
 	}
 }
 
 func renewhookHandler(w http.ResponseWriter, r *http.Request) {
-	err := renewWebhook()
-	if err != nil {
+	if err := renewWebhook(); err != nil {
 		log.Printf(err.Error())
 	}
 }
