@@ -35,7 +35,7 @@ $ vi .env
 $ go run server.go
 ```
 
-You can create and renew the webhook by calling the service. For example:
+After you start the service, create a webhook by calling the `/createhook` endpoint. You can also call the `/renewhook` endpoint to manually renew the webhook. For example:
 
 ```bash
 # Create Webhook
