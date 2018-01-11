@@ -162,7 +162,7 @@ func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err er
 	}
 
 	CurrentWebhookSubscriptionId = info.Id
-	log.Info("Created/renewed Webhook with Id: %s", CurrentWebhookSubscriptionId)
+	log.Info(fmt.Sprintf("Created/renewed Webhook with Id: %s", CurrentWebhookSubscriptionId))
 	return nil
 }
 
@@ -207,8 +207,11 @@ func main() {
 	SetEventFilters()
 
 	http.Handle("/webhook", http.HandlerFunc(webhookHandler))
+	http.Handle("/webhook/", http.HandlerFunc(webhookHandler))
 	http.Handle("/createhook", http.HandlerFunc(createhookHandler))
+	http.Handle("/createhook/", http.HandlerFunc(createhookHandler))
 	http.Handle("/renewhook", http.HandlerFunc(renewhookHandler))
+	http.Handle("/renewhook/", http.HandlerFunc(renewhookHandler))
 
 	port := os.Getenv("PORT")
 	if len(strings.TrimSpace(port)) == 0 {

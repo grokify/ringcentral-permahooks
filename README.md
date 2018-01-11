@@ -51,6 +51,16 @@ $ curl -XGET 'https://12345678.ngrok.io/createhook'
 $ curl -XGET 'https://12345678.ngrok.io/renewhook'
 ```
 
+Successfully calling `/createhook` will result in log entries like the following:
+
+```bash
+$ go run server.go 
+INFO[0023] Creating Hook...                             
+INFO[0024] {"eventFilters":["/restapi/v1.0/account/~/extension/~/message-store/instant?type=SMS","/restapi/v1.0/subscription/~?threshold=86400\u0026interval=3600"],"deliveryMode":{"transportType":"WebHook","address":"https://12345678.ngrok.io/webhook"},"expiresIn":604800} 
+INFO[0025] Handling webhook...                          
+INFO[0025] Validation-Token: 11112222-3333-4444-5555-666677778888 
+INFO[0025] Created/renewed Webhook with Id: 11112222-3333-4444-5555-666677778888
+
 ### Tunneling
 
 If your server is behind a NAT or a firewall and not accessible via the Internet, you can use a tunneling service such as [ngrok](https://ngrok.com/). In the following example, you would create a RingCentral webhook to `https://12345678.ngrok.io/webhook` which you would set as `PERMAHOOKS_INBOUND_WEBHOOK_URL` in your environment.
