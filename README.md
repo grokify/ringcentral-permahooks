@@ -60,6 +60,7 @@ INFO[0024] {"eventFilters":["/restapi/v1.0/account/~/extension/~/message-store/i
 INFO[0025] Handling webhook...                          
 INFO[0025] Validation-Token: 11112222-3333-4444-5555-666677778888 
 INFO[0025] Created/renewed Webhook with Id: 11112222-3333-4444-5555-666677778888
+```
 
 ### Tunneling
 
