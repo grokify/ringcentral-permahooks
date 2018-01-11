@@ -27,9 +27,9 @@ const (
 )
 
 var (
-	OutboundWebhookUrl           = "" // Simple inbound webhook like Zapier or Chathooks
-	InboundWebhookUrl            = "" // Server URL the RingCentral API will send to
-	CurrentWebhookSubscriptionId = "" // Current SubscriptionID to renew
+	OutboundWebhookUrl           = ""                                  // Simple inbound webhook like Zapier or Chathooks
+	InboundWebhookUrl            = "https://12345678.ngrok.io/webhook" // Server URL the RingCentral API will send to
+	CurrentWebhookSubscriptionId = ""                                  // Current SubscriptionID to renew
 	ExpiresIn                    = 60 * 60 * 24 * 7
 	RenewalThresholdTime         = 60 * 60 * 24
 	RenewalIntervalTime          = 60 * 60
