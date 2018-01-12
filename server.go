@@ -38,15 +38,15 @@ var (
 // EventFilters determines the RingCentral events this service will subscribe to.
 // Threshold is the threshold time (in seconds) remaining before subscription expiration when server should start to send renewal reminder notifications. This time is approximate. It cannot be less than the interval of reminder job execution. It also cannot be greater than a half of this subscription TTL.
 // Interval is the interval (in seconds) between reminder notifications. This time is approximate. It cannot be less than the interval of reminder job execution. It also cannot be greater than a half of threshold value.
-var RenewalEventFilter = GetRenewalEventFilter("~", RenewalThresholdTime, RenewalIntervalTime)
+var RenewalEventFilter = getRenewalEventFilter("~", RenewalThresholdTime, RenewalIntervalTime)
 var EventFilters = []string{SMSEventFilter, RenewalEventFilter}
 
-func GetRenewalEventFilter(subscriptionID string, threshold, interval int) string {
+func getRenewalEventFilter(subscriptionID string, threshold, interval int) string {
 	return fmt.Sprintf(RenewalEventFilterFormat, subscriptionID, threshold, interval)
 }
 
-func SetEventFilters() {
-	RenewalEventFilter = GetRenewalEventFilter("~", RenewalThresholdTime, RenewalIntervalTime)
+func setEventFilters() {
+	RenewalEventFilter = getRenewalEventFilter("~", RenewalThresholdTime, RenewalIntervalTime)
 	EventFilters = []string{SMSEventFilter, RenewalEventFilter}
 }
 
@@ -189,6 +189,13 @@ func loadEnv() error {
 	return godotenv.Load(envPaths...)
 }
 
+func Log(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
+		handler.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	err := loadEnv()
 	if err != nil {
@@ -204,7 +211,7 @@ func main() {
 		RenewalThresholdTime = 80
 		RenewalIntervalTime = 30
 	}
-	SetEventFilters()
+	setEventFilters()
 
 	http.Handle("/webhook", http.HandlerFunc(webhookHandler))
 	http.Handle("/webhook/", http.HandlerFunc(webhookHandler))
@@ -213,10 +220,12 @@ func main() {
 	http.Handle("/renewhook", http.HandlerFunc(renewhookHandler))
 	http.Handle("/renewhook/", http.HandlerFunc(renewhookHandler))
 
+	// Check PORT env. This environment variable name is hard coded to work
+	// with Heroku which will auto-assign a port using this name
 	port := os.Getenv("PORT")
 	if len(strings.TrimSpace(port)) == 0 {
 		port = DefaultPort
 	}
 
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(http.ListenAndServe(":"+port, Log(http.DefaultServeMux)))
 }
