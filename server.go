@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -242,5 +243,13 @@ func main() {
 		port = DefaultPort
 	}
 
-	log.Fatal(http.ListenAndServe(":"+port, Log(http.DefaultServeMux)))
+	listener, err := net.Listen("tcp", ":"+port)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	done := make(chan bool)
+	go http.Serve(listener, Log(http.DefaultServeMux))
+	log.Info(fmt.Sprintf("Listening on port %v", port))
+	<-done
 }
