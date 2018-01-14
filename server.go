@@ -245,7 +245,7 @@ func main() {
 
 	listener, err := net.Listen("tcp", ":"+port)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal(err)
 	}
 
 	done := make(chan bool)
