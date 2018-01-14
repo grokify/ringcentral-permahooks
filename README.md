@@ -85,7 +85,19 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
 
 ## To Do
 
-* Heroku deployment.
+### Heroku deployment
+
+To support Heroku, dependences are managed with `godep`. The following is used:
+
+```bash
+$ go get -u github.com/tools/godep
+$ cd $GOPATH/src/github.com/grokify/ringcentral-permahooks
+$ godep save ./...
+```
+
+More information is avialable here:
+
+https://devcenter.heroku.com/articles/go-dependencies-via-godep
 
 ## Support
 
