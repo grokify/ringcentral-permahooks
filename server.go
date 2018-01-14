@@ -12,6 +12,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/grokify/gotilla/encoding/jsonutil"
+	"github.com/grokify/gotilla/net/urlutil"
 	"github.com/joho/godotenv"
 
 	rc "github.com/grokify/go-ringcentral/client"
@@ -202,8 +203,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	InboundWebhookUrl = os.Getenv("PERMAHOOKS_INBOUND_WEBHOOK_URL")
-	OutboundWebhookUrl = os.Getenv("PERMAHOOKS_OUTBOUND_WEBHOOK_URL")
+	InboundWebhookUrl = strings.TrimSpace(os.Getenv("PERMAHOOKS_INBOUND_WEBHOOK_URL"))
+	OutboundWebhookUrl = strings.TrimSpace(os.Getenv("PERMAHOOKS_OUTBOUND_WEBHOOK_URL"))
+
+	urlValidator := urlutil.URLValidator{RequiredSchemes: map[string]int{"https": 1}}
+	_, err = urlValidator.ValidateURLString(InboundWebhookUrl)
+	if err != nil {
+		log.Fatal(fmt.Sprintf("Environment variable [%v] error: %v",
+			"PERMAHOOKS_INBOUND_WEBHOOK_URL",
+			err.Error()))
+	}
+	_, err = urlValidator.ValidateURLString(OutboundWebhookUrl)
+	if err != nil {
+		log.Fatal(fmt.Sprintf("Environment variable [%v] error: %v",
+			"PERMAHOOKS_OUTBOUND_WEBHOOK_URL",
+			err.Error()))
+	}
 
 	shortRenewal := false // to verify if renewal is working.
 	if shortRenewal {
