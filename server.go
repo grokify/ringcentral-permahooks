@@ -13,7 +13,6 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/grokify/gotilla/encoding/jsonutil"
-	"github.com/grokify/gotilla/fmt/fmtutil"
 	hum "github.com/grokify/gotilla/net/httputilmore"
 	"github.com/grokify/gotilla/net/urlutil"
 	"github.com/joho/godotenv"
@@ -159,9 +158,7 @@ func renewWebhook() error {
 }
 
 func handleInternalServerError(w http.ResponseWriter, logmessage string) {
-	generic500message := []byte("500 - Internal Server Error - Check logs...")
-	w.WriteHeader(http.StatusInternalServerError)
-	w.Write(generic500message)
+	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	log.Warn(logmessage)
 }
 
