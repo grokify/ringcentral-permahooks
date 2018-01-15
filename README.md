@@ -40,7 +40,7 @@ The app must have the following settings:
 * OAuth Grant Types: `Password flow`
 * Permissions: `Read Messages`, `Webhook Subscriptions`
 
-In the Developer Portal, your app will (minimally) look like this:
+In the Developer Portal, your app will look like this.
 
 ![](ringcentral-permahooks_app_configuration.png "")
 
