@@ -42,7 +42,7 @@ The app must have the following settings:
 
 In the Developer Portal, your app will (minimally) look like this:
 
-![](permahooks_app_configuration.png "")
+![](ringcentral-permahooks_app_configuration.png "")
 
 ## Installation and Configuration
 
