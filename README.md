@@ -29,6 +29,21 @@ See more information about creating RingCentral webhooks here:
 * API Reference: https://developer.ringcentral.com/api-docs/latest/index.html#!#RefCreateSubscription
 * Developer Guide: http://ringcentral-api-docs.readthedocs.io/en/latest/webhooks/
 
+## Pre-requisites
+
+You must have created an app on the RingCentral Developer Platform by logging into the Developer Portal:
+
+https://developer.ringcentral.com
+
+The app must have the following settings:
+
+* OAuth Grant Types: `Password flow`
+* Permissions: `Read Messages`, `Webhook Subscriptions`
+
+In the Developer Portal, your app will (minimally) look like this:
+
+![](permahooks_app_configuration.png "")
+
 ## Installation and Configuration
 
 Before you can complete the following installation procedure, you need to get a webhook URL from your downstream service. For example, a Zapier webhook URL.
