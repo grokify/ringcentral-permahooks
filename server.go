@@ -13,6 +13,8 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/grokify/gotilla/encoding/jsonutil"
+	"github.com/grokify/gotilla/fmt/fmtutil"
+	hum "github.com/grokify/gotilla/net/httputilmore"
 	"github.com/grokify/gotilla/net/urlutil"
 	"github.com/joho/godotenv"
 
@@ -156,6 +158,37 @@ func renewWebhook() error {
 	)
 }
 
+func handleInternalServerError(w http.ResponseWriter, logmessage string) {
+	generic500message := []byte("500 - Internal Server Error - Check logs...")
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Write(generic500message)
+	log.Warn(logmessage)
+}
+
+func listhooksHandler(w http.ResponseWriter, r *http.Request) {
+	log.Info("Getting Subscription List...")
+	apiClient, err := newRingCentralClient()
+	if err != nil {
+		handleInternalServerError(w, fmt.Sprintf("Listhooks: Error getting RC Client: %v", err.Error()))
+		return
+	}
+	info, resp, err := apiClient.PushNotificationsApi.GetSubscriptions(context.Background())
+	if err != nil {
+		handleInternalServerError(w, fmt.Sprintf("Error calling GetSubscriptions API: %v", err.Error()))
+		return
+	} else if resp.StatusCode >= 300 {
+		handleInternalServerError(w, fmt.Sprintf("Error calling GetSubscriptions API: Status %v", resp.StatusCode))
+		return
+	}
+	bytes, err := json.MarshalIndent(info, "", "  ")
+	if err != nil {
+		handleInternalServerError(w, fmt.Sprintf("Error calling GetSubscriptions API: ReadBody %v", err.Error()))
+		return
+	}
+	w.Header().Set(hum.ContentTypeHeader, hum.ContentTypeValueJSONUTF8)
+	w.Write(bytes)
+}
+
 func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err error) error {
 	if err != nil {
 		return fmt.Errorf("%v: %v", "API Response Err", err.Error())
@@ -221,20 +254,21 @@ func main() {
 			err.Error()))
 	}
 
-	shortRenewal := false // to verify if renewal is working.
-	if shortRenewal {
-		ExpiresIn = 180
-		RenewalThresholdTime = 80
-		RenewalIntervalTime = 30
-	}
-	setEventFilters()
-
 	http.Handle("/webhook", http.HandlerFunc(webhookHandler))
 	http.Handle("/webhook/", http.HandlerFunc(webhookHandler))
 	http.Handle("/createhook", http.HandlerFunc(createhookHandler))
 	http.Handle("/createhook/", http.HandlerFunc(createhookHandler))
 	http.Handle("/renewhook", http.HandlerFunc(renewhookHandler))
 	http.Handle("/renewhook/", http.HandlerFunc(renewhookHandler))
+
+	testing := false // to verify if renewal is working.
+	if testing {
+		ExpiresIn = 180
+		RenewalThresholdTime = 80
+		RenewalIntervalTime = 30
+		http.Handle("/listhooks", http.HandlerFunc(listhooksHandler))
+	}
+	setEventFilters()
 
 	// Check PORT env. This environment variable name is hard coded to work
 	// with Heroku which will auto-assign a port using this name
