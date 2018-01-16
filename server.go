@@ -96,10 +96,10 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 		"application/json",
 		bytes.NewBuffer(body))
 	if err != nil {
-		log.Printf("Downstream webhook error: %s", err.Error())
+		log.Warn("Downstream webhook error: %s", err.Error())
 		return
 	} else if resp.StatusCode >= 300 {
-		log.Printf("Downstream webhook error: %v", resp.StatusCode)
+		log.Warn("Downstream webhook error: %v", resp.StatusCode)
 		return
 	}
 }
@@ -204,6 +204,8 @@ func newRingCentralClient() (*rc.APIClient, error) {
 			ServerURL:    os.Getenv("RINGCENTRAL_SERVER_URL"),
 			ClientID:     os.Getenv("RINGCENTRAL_CLIENT_ID"),
 			ClientSecret: os.Getenv("RINGCENTRAL_CLIENT_SECRET"),
+			AppName:      "github.com/grokify/ringcentral-permahooks",
+			AppVersion:   "0.0.1",
 		},
 		rco.UserCredentials{
 			Username:  os.Getenv("RINGCENTRAL_USERNAME"),
@@ -233,6 +235,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.SetLevel(log.DebugLevel)
 
 	InboundWebhookUrl = strings.TrimSpace(os.Getenv("PERMAHOOKS_INBOUND_WEBHOOK_URL"))
 	OutboundWebhookUrl = strings.TrimSpace(os.Getenv("PERMAHOOKS_OUTBOUND_WEBHOOK_URL"))

@@ -8,15 +8,11 @@
 This is a small app that turns RingCentral's expiring outbound webhooks into non-expiring webhooks. This is especially useful when connecting to a service with a simple inbound webhook implementation such as Zapier and chat solutions like [Glip](https://glip.com). Benefits include:
 
 * Seamlessly links RingCentral Outbound Webhooks with Inbound Webhooks offered by Zapier, Glip and others.
-* Automatically handles `Validation-Token`
-* Automatically handles RingCentral webhook renewal
 
-This is useful because RingCentral's webhook implementation has a couple of features that are not supported by all webhook consuming services:
+This is useful because RingCentral's webhook implementation has a couple of features that are not supported by all webhook consuming services. Both of the below are handled automatically by this service.
 
 * RingCentral requires the webhook endpoint return the request `Validation-Token` header in the response to indicate the receiving endpoint is the correct one.
 * RingCentral webhooks expire to ensure the correct site is receiving the information.
-
-However, some sites can only receive a simple webhook post without these features, this service converts RingCentral's webhooks into a simple webhook for these services.
 
 Deployment options:
 
@@ -37,6 +33,8 @@ https://developer.ringcentral.com
 
 The app must have the following settings:
 
+* Application Type: `Private`
+* Platform Type: `Server-only (No UI)`
 * OAuth Grant Types: `Password flow`
 * Permissions: `Read Messages`, `Webhook Subscriptions`
 
