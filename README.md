@@ -35,7 +35,7 @@ The app must have the following settings:
 
 * Application Type: `Private`
 * Platform Type: `Server-only (No UI)`
-* OAuth Grant Types: `Password flow`
+* OAuth Grant Types: `Refresh Access Token`, `Password flow`
 * Permissions: `Read Messages`, `Webhook Subscriptions`
 
 In the Developer Portal, your app will look like this.
