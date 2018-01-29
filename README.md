@@ -18,7 +18,7 @@ Deployment options:
 
 * Run locally: only the `server.go` file is necessary as shown below.
 * Lambda: TBD, will use [aws/aws-lambda-go](https://github.com/aws/aws-lambda-go) like [Chathooks](https://github.com/grokify/chathooks)
-* Heroku: TBD, in progress including `Procfile` and `Godeps` folder.
+* Heroku: TBD, investigating best way to vendor deps for Heroku.
 
 See more information about creating RingCentral webhooks here:
 
