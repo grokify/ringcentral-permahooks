@@ -16,7 +16,7 @@ This is useful because RingCentral's webhook implementation has a couple of feat
 
 Deployment options:
 
-* Run locally: only the `server.go` file is necessary as shown below.
+* Run locally: only the `main.go` file is necessary as shown below.
 * Lambda: TBD, will use [aws/aws-lambda-go](https://github.com/aws/aws-lambda-go) like [Chathooks](https://github.com/grokify/chathooks)
 * Heroku: TBD, investigating best way to vendor deps for Heroku.
 
@@ -51,7 +51,7 @@ $ go get github.com/grokify/ringcentral-permahooks
 $ cd $GOPATH/src/github.com/grokify/ringcentral-permahooks
 $ cp sample.env .env
 $ vi .env
-$ go run server.go
+$ go run main.go
 ```
 
 After you start the service, create a webhook by calling the `/createhook` endpoint. You can also call the `/renewhook` endpoint to manually renew the webhook. For example:
@@ -67,7 +67,7 @@ $ curl -XGET 'https://12345678.ngrok.io/renewhook'
 Successfully calling `/createhook` will result in log entries like the following:
 
 ```bash
-$ go run server.go 
+$ go run main.go 
 INFO[0023] Creating Hook...                             
 INFO[0024] {"eventFilters":["/restapi/v1.0/account/~/extension/~/message-store/instant?type=SMS","/restapi/v1.0/subscription/~?threshold=86400\u0026interval=3600"],"deliveryMode":{"transportType":"WebHook","address":"https://12345678.ngrok.io/webhook"},"expiresIn":604800} 
 INFO[0025] Handling webhook...                          
@@ -98,9 +98,9 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
 
 ## To Do
 
-### Heroku deployment
+### Heroku Support
 
-To support Heroku, dependences are managed with `godep`. The following is used:
+Heroku support is under investigation. For Heroku, dependences are managed with `godep`. The following is used:
 
 ```bash
 $ go get -u github.com/tools/godep
