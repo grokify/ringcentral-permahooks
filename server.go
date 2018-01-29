@@ -11,11 +11,11 @@ import (
 	"os"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/grokify/gotilla/encoding/jsonutil"
 	hum "github.com/grokify/gotilla/net/httputilmore"
 	"github.com/grokify/gotilla/net/urlutil"
 	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 
 	rc "github.com/grokify/go-ringcentral/client"
 	rcu "github.com/grokify/go-ringcentral/clientutil"
