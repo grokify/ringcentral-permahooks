@@ -17,6 +17,8 @@ import (
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/grokify/gotilla/fmt/fmtutil"
+
 	rc "github.com/grokify/go-ringcentral/client"
 	rcu "github.com/grokify/go-ringcentral/clientutil"
 	rco "github.com/grokify/oauth2more/ringcentral"
@@ -65,24 +67,24 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Read the body to check if this is a renewal event
-	body, err := ioutil.ReadAll(r.Body)
+	httpBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("Error reading body: %v", err)
 		http.Error(w, "can't read body", http.StatusBadRequest)
 		return
 	}
-	log.Debug(string(body))
+	log.Debug(string(httpBody))
 
-	rcu := &rcu.Event{}
-	err = json.Unmarshal(body, rcu)
+	event := &rcu.Event{}
+	err = json.Unmarshal(httpBody, event)
 	if err != nil {
 		log.Warn("JSON Unmarshal Error: %s", err.Error())
 		return
 	}
 
 	// If this is renewal event, renew the webhook and return.
-	if rcu.Event == RenewalEventFilter {
-		err := renewWebhook()
+	if event.Event == RenewalEventFilter {
+		_, err := renewWebhook(event.SubscriptionId)
 		if err != nil {
 			log.Warn("Error reading body: %v", err)
 			http.Error(w, "can't read body", http.StatusBadRequest)
@@ -90,11 +92,26 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if 1 == 1 {
+		evt, err := rcu.EventParseBytes(httpBody)
+		if err != nil {
+			panic(err)
+		}
+		fmtutil.PrintJSON(evt)
+		if evt.IsEventType(rcu.InstantMessageEvent) {
+			body, err := evt.GetInstantMessageBody()
+			if err != nil {
+				panic(err)
+			}
+			fmtutil.PrintJSON(body)
+		}
+	}
+
 	// Forward the body to the Webhook URL
 	resp, err := http.Post(
 		OutboundWebhookUrl,
 		"application/json",
-		bytes.NewBuffer(body))
+		bytes.NewBuffer(httpBody))
 	if err != nil {
 		log.Warn("Downstream webhook error: %s", err.Error())
 		return
@@ -105,22 +122,33 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createhookHandler(w http.ResponseWriter, r *http.Request) {
-	if err := createWebhook(); err != nil {
+	resp, err := createWebhook()
+	if err != nil {
 		log.Printf(err.Error())
+		return
 	}
+	body, err := hum.ResponseBody(resp)
+	if err != nil {
+		log.Printf(err.Error())
+		return
+	}
+
+	w.Header().Set(hum.HeaderContentType, hum.HeaderContentTypeValueJSONUTF8)
+	w.Write(body)
 }
 
 func renewhookHandler(w http.ResponseWriter, r *http.Request) {
-	if err := renewWebhook(); err != nil {
+	_, err := renewWebhook()
+	if err != nil {
 		log.Printf(err.Error())
 	}
 }
 
-func createWebhook() error {
+func createWebhook() (*http.Response, error) {
 	log.Info("Creating Hook...")
 	apiClient, err := newRingCentralClient()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	req := rc.CreateSubscriptionRequest{
@@ -141,18 +169,22 @@ func createWebhook() error {
 	)
 }
 
-func renewWebhook() error {
-	log.Debug("Renewing Hook Id %v ...", CurrentWebhookSubscriptionId)
+func renewWebhook(subscriptionIds ...string) (*http.Response, error) {
+	subscriptionId := CurrentWebhookSubscriptionId
+	if len(subscriptionIds) > 0 {
+		subscriptionId = subscriptionIds[0]
+	}
+	log.Debug("Renewing Hook Id %v ...", subscriptionId)
 	apiClient, err := newRingCentralClient()
 	if err != nil {
 		log.Printf("RENEW NEW RC CLIENT ERROR: %v", err.Error())
-		return err
+		return nil, err
 	}
 
 	return handleWebhookResponse(
 		apiClient.PushNotificationsApi.RenewSubscription(
 			context.Background(),
-			CurrentWebhookSubscriptionId,
+			subscriptionId,
 		),
 	)
 }
@@ -182,24 +214,24 @@ func listhooksHandler(w http.ResponseWriter, r *http.Request) {
 		handleInternalServerError(w, fmt.Sprintf("Error calling GetSubscriptions API: ReadBody %v", err.Error()))
 		return
 	}
-	w.Header().Set(hum.ContentTypeHeader, hum.ContentTypeValueJSONUTF8)
+	w.Header().Set(hum.HeaderContentType, hum.HeaderContentTypeValueJSONUTF8)
 	w.Write(bytes)
 }
 
-func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err error) error {
+func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err error) (*http.Response, error) {
 	if err != nil {
-		return fmt.Errorf("%v: %v", "API Response Err", err.Error())
+		return resp, fmt.Errorf("%v: %v", "API Response Err", err.Error())
 	} else if resp.StatusCode > 299 {
-		return fmt.Errorf("RingCentral Subscription API request failure status code: %v", resp.StatusCode)
+		return resp, fmt.Errorf("RingCentral Subscription API request failure status code: %v", resp.StatusCode)
 	}
 
 	CurrentWebhookSubscriptionId = info.Id
 	log.Info(fmt.Sprintf("Created/renewed Webhook with Id: %s", CurrentWebhookSubscriptionId))
-	return nil
+	return resp, nil
 }
 
 func newRingCentralClient() (*rc.APIClient, error) {
-	return rcu.NewApiClient(
+	return rcu.NewApiClientPassword(
 		rco.ApplicationCredentials{
 			ServerURL:    os.Getenv("RINGCENTRAL_SERVER_URL"),
 			ClientID:     os.Getenv("RINGCENTRAL_CLIENT_ID"),
@@ -207,7 +239,7 @@ func newRingCentralClient() (*rc.APIClient, error) {
 			AppName:      "github.com/grokify/ringcentral-permahooks",
 			AppVersion:   "0.0.1",
 		},
-		rco.UserCredentials{
+		rco.PasswordCredentials{
 			Username:  os.Getenv("RINGCENTRAL_USERNAME"),
 			Extension: os.Getenv("RINGCENTRAL_EXTENSION"),
 			Password:  os.Getenv("RINGCENTRAL_PASSWORD"),
@@ -262,7 +294,7 @@ func main() {
 	http.Handle("/renewhook", http.HandlerFunc(renewhookHandler))
 	http.Handle("/renewhook/", http.HandlerFunc(renewhookHandler))
 
-	testing := false // to verify if renewal is working.
+	testing := true // to verify if renewal is working.
 	if testing {
 		ExpiresIn = 180
 		RenewalThresholdTime = 80
