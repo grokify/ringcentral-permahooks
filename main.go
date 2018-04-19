@@ -27,6 +27,7 @@ import (
 const (
 	DefaultPort              = "8080"
 	ValidationTokenHeader    = "Validation-Token"
+	MessageStoreEventFilter  = "/restapi/v1.0/account/~/extension/~/message-store"
 	SMSEventFilter           = "/restapi/v1.0/account/~/extension/~/message-store/instant?type=SMS"
 	RenewalEventFilterFormat = "/restapi/v1.0/subscription/%s?threshold=%d&interval=%d"
 )
@@ -44,7 +45,7 @@ var (
 // Threshold is the threshold time (in seconds) remaining before subscription expiration when server should start to send renewal reminder notifications. This time is approximate. It cannot be less than the interval of reminder job execution. It also cannot be greater than a half of this subscription TTL.
 // Interval is the interval (in seconds) between reminder notifications. This time is approximate. It cannot be less than the interval of reminder job execution. It also cannot be greater than a half of threshold value.
 var RenewalEventFilter = getRenewalEventFilter("~", RenewalThresholdTime, RenewalIntervalTime)
-var EventFilters = []string{SMSEventFilter, RenewalEventFilter}
+var EventFilters = []string{SMSEventFilter, MessageStoreEventFilter, RenewalEventFilter}
 
 func getRenewalEventFilter(subscriptionID string, threshold, interval int) string {
 	return fmt.Sprintf(RenewalEventFilterFormat, subscriptionID, threshold, interval)
@@ -52,7 +53,7 @@ func getRenewalEventFilter(subscriptionID string, threshold, interval int) strin
 
 func setEventFilters() {
 	RenewalEventFilter = getRenewalEventFilter("~", RenewalThresholdTime, RenewalIntervalTime)
-	EventFilters = []string{SMSEventFilter, RenewalEventFilter}
+	EventFilters = []string{SMSEventFilter, MessageStoreEventFilter, RenewalEventFilter}
 }
 
 func webhookHandler(w http.ResponseWriter, r *http.Request) {
@@ -73,6 +74,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "can't read body", http.StatusBadRequest)
 		return
 	}
+	log.Debug("Receiving Webhook....")
 	log.Debug(string(httpBody))
 
 	event := &rcu.Event{}
@@ -174,7 +176,7 @@ func renewWebhook(subscriptionIds ...string) (*http.Response, error) {
 	if len(subscriptionIds) > 0 {
 		subscriptionId = subscriptionIds[0]
 	}
-	log.Debug("Renewing Hook Id %v ...", subscriptionId)
+	log.Debug(fmt.Sprintf("Renewing Hook Id %v ...", subscriptionId))
 	apiClient, err := newRingCentralClient()
 	if err != nil {
 		log.Printf("RENEW NEW RC CLIENT ERROR: %v", err.Error())
