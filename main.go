@@ -112,7 +112,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	// Forward the body to the Webhook URL
 	resp, err := http.Post(
 		OutboundWebhookUrl,
-		"application/json",
+		hum.ContentTypeAppJsonUtf8,
 		bytes.NewBuffer(httpBody))
 	if err != nil {
 		log.Warn("Downstream webhook error: %s", err.Error())
@@ -135,7 +135,7 @@ func createhookHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set(hum.HeaderContentType, hum.HeaderContentTypeValueJSONUTF8)
+	w.Header().Set(hum.HeaderContentType, hum.ContentTypeAppJsonUtf8)
 	w.Write(body)
 }
 
@@ -216,7 +216,7 @@ func listhooksHandler(w http.ResponseWriter, r *http.Request) {
 		handleInternalServerError(w, fmt.Sprintf("Error calling GetSubscriptions API: ReadBody %v", err.Error()))
 		return
 	}
-	w.Header().Set(hum.HeaderContentType, hum.HeaderContentTypeValueJSONUTF8)
+	w.Header().Set(hum.HeaderContentType, hum.ContentTypeAppJsonUtf8)
 	w.Write(bytes)
 }
 
