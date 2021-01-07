@@ -11,16 +11,15 @@ import (
 	"os"
 	"strings"
 
-	"github.com/grokify/gotilla/encoding/jsonutil"
-	hum "github.com/grokify/gotilla/net/httputilmore"
-	"github.com/grokify/gotilla/net/urlutil"
+	"github.com/grokify/simplego/encoding/jsonutil"
+	"github.com/grokify/simplego/fmt/fmtutil"
+	hum "github.com/grokify/simplego/net/httputilmore"
+	"github.com/grokify/simplego/net/urlutil"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/grokify/gotilla/fmt/fmtutil"
-
-	rc "github.com/grokify/go-ringcentral/client"
-	rcu "github.com/grokify/go-ringcentral/clientutil"
+	rc "github.com/grokify/go-ringcentral/office/v1/client"
+	rcu "github.com/grokify/go-ringcentral/office/v1/util"
 	rco "github.com/grokify/oauth2more/ringcentral"
 )
 
@@ -80,7 +79,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	event := &rcu.Event{}
 	err = json.Unmarshal(httpBody, event)
 	if err != nil {
-		log.Warn("JSON Unmarshal Error: %s", err.Error())
+		log.Warnf("JSON Unmarshal Error: %s", err.Error())
 		return
 	}
 
@@ -88,7 +87,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	if event.Event == RenewalEventFilter {
 		_, err := renewWebhook(event.SubscriptionId)
 		if err != nil {
-			log.Warn("Error reading body: %v", err)
+			log.Warnf("Error reading body: %v", err)
 			http.Error(w, "can't read body", http.StatusBadRequest)
 		}
 		return
@@ -115,10 +114,10 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 		hum.ContentTypeAppJsonUtf8,
 		bytes.NewBuffer(httpBody))
 	if err != nil {
-		log.Warn("Downstream webhook error: %s", err.Error())
+		log.Warnf("Downstream webhook error: %s", err.Error())
 		return
 	} else if resp.StatusCode >= 300 {
-		log.Warn("Downstream webhook error: %v", resp.StatusCode)
+		log.Warnf("Downstream webhook error: %v", resp.StatusCode)
 		return
 	}
 }
@@ -129,7 +128,7 @@ func createhookHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf(err.Error())
 		return
 	}
-	body, err := hum.ResponseBody(resp)
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Printf(err.Error())
 		return
@@ -155,7 +154,7 @@ func createWebhook() (*http.Response, error) {
 
 	req := rc.CreateSubscriptionRequest{
 		EventFilters: EventFilters,
-		DeliveryMode: &rc.NotificationDeliveryModeRequest{
+		DeliveryMode: rc.NotificationDeliveryModeRequest{
 			TransportType: "WebHook",
 			Address:       InboundWebhookUrl,
 		},
