@@ -1,9 +1,9 @@
 # RingCentral Permahooks
 
-[![Build Status][build-status-svg]][build-status-link]
-[![Go Report Card][goreport-svg]][goreport-link]
-[![Docs][docs-godoc-svg]][docs-godoc-link]
-[![License][license-svg]][license-link]
+[![Build Status][build-status-svg]][build-status-url]
+[![Go Report Card][goreport-svg]][goreport-url]
+[![Docs][docs-godoc-svg]][docs-godoc-url]
+[![License][license-svg]][license-url]
 
 This is a small app that turns RingCentral's expiring outbound webhooks into non-expiring webhooks. This is especially useful when connecting to a service with a simple inbound webhook implementation such as Zapier and chat solutions like [Glip](https://glip.com). Benefits include:
 
@@ -119,11 +119,11 @@ If you have questions or support, please use the following resources:
 * Stack Overflow: https://stackoverflow.com/questions/tagged/ringcentral
 * GitHub: https://github.com/grokify/ringcentral-permahooks/issues
 
- [build-status-svg]: https://api.travis-ci.org/grokify/ringcentral-permahooks.svg?branch=master
- [build-status-link]: https://travis-ci.org/grokify/ringcentral-permahooks
+ [build-status-svg]: https://github.com/grokify/ringcentral-permahooks/workflows/build/badge.svg
+ [build-status-url]: https://github.com/grokify/ringcentral-permahooks/actions
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/ringcentral-permahooks
- [goreport-link]: https://goreportcard.com/report/github.com/grokify/ringcentral-permahooks
- [docs-godoc-svg]: https://img.shields.io/badge/docs-godoc-blue.svg
- [docs-godoc-link]: https://godoc.org/github.com/grokify/ringcentral-permahooks
+ [goreport-url]: https://goreportcard.com/report/github.com/grokify/ringcentral-permahooks
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/ringcentral-permahooks
+ [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/ringcentral-permahooksfds
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-link]: https://github.com/grokify/ringcentral-permahooks/blob/master/LICENSE.md
+ [license-url]: https://github.com/grokify/ringcentral-permahooks/blob/master/LICENSE.md
