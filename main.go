@@ -11,10 +11,13 @@ import (
 	"os"
 	"strings"
 
+	"github.com/buaazp/fasthttprouter"
 	"github.com/grokify/simplego/encoding/jsonutil"
 	"github.com/grokify/simplego/fmt/fmtutil"
+	"github.com/grokify/simplego/net/http/httpsimple"
 	hum "github.com/grokify/simplego/net/httputilmore"
 	"github.com/grokify/simplego/net/urlutil"
+	"github.com/grokify/simplego/strconv/strconvutil"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 
@@ -25,6 +28,7 @@ import (
 
 const (
 	DefaultPort              = "8080"
+	DefaultPortInt           = 8080
 	ValidationTokenHeader    = "Validation-Token"
 	MessageStoreEventFilter  = "/restapi/v1.0/account/~/extension/~/message-store"
 	SMSEventFilter           = "/restapi/v1.0/account/~/extension/~/message-store/instant?type=SMS"
@@ -263,6 +267,38 @@ func Log(handler http.Handler) http.Handler {
 	})
 }
 
+type Server struct {
+	Port       int
+	HTTPEngine string
+	Testing    bool
+}
+
+func NewServer() Server {
+	svr := Server{
+		Port:       strconvutil.AtoiWithDefault(os.Getenv("PORT"), DefaultPortInt),
+		HTTPEngine: os.Getenv("HTTP_ENGINE"),
+	}
+	return svr
+}
+
+func (svr Server) PortInt() int                       { return svr.Port }
+func (svr Server) HttpEngine() string                 { return svr.HTTPEngine }
+func (svr Server) RouterFast() *fasthttprouter.Router { return nil }
+
+func (svr Server) Router() http.Handler {
+	mux := http.NewServeMux()
+	mux.Handle("/webhook", http.HandlerFunc(webhookHandler))
+	mux.Handle("/webhook/", http.HandlerFunc(webhookHandler))
+	mux.Handle("/createhook", http.HandlerFunc(createhookHandler))
+	mux.Handle("/createhook/", http.HandlerFunc(createhookHandler))
+	mux.Handle("/renewhook", http.HandlerFunc(renewhookHandler))
+	mux.Handle("/renewhook/", http.HandlerFunc(renewhookHandler))
+	if svr.Testing {
+		mux.Handle("/listhooks", http.HandlerFunc(listhooksHandler))
+	}
+	return mux
+}
+
 func main() {
 	err := loadEnv()
 	if err != nil {
@@ -288,36 +324,39 @@ func main() {
 			err.Error()))
 	}
 
-	http.Handle("/webhook", http.HandlerFunc(webhookHandler))
-	http.Handle("/webhook/", http.HandlerFunc(webhookHandler))
-	http.Handle("/createhook", http.HandlerFunc(createhookHandler))
-	http.Handle("/createhook/", http.HandlerFunc(createhookHandler))
-	http.Handle("/renewhook", http.HandlerFunc(renewhookHandler))
-	http.Handle("/renewhook/", http.HandlerFunc(renewhookHandler))
+	svr := NewServer()
 
 	testing := true // to verify if renewal is working.
+
 	if testing {
+		svr.Testing = testing
 		ExpiresIn = 180
 		RenewalThresholdTime = 80
 		RenewalIntervalTime = 30
-		http.Handle("/listhooks", http.HandlerFunc(listhooksHandler))
 	}
 	setEventFilters()
 
-	// Check PORT env. This environment variable name is hard coded to work
-	// with Heroku which will auto-assign a port using this name
-	port := os.Getenv("PORT")
-	if len(strings.TrimSpace(port)) == 0 {
-		port = DefaultPort
-	}
+	if 1 == 0 {
+		// Check PORT env. This environment variable name is hard coded to work
+		// with Heroku which will auto-assign a port using this name
+		port := os.Getenv("PORT")
+		if len(strings.TrimSpace(port)) == 0 {
+			port = DefaultPort
+		}
 
-	listener, err := net.Listen("tcp", ":"+port)
-	if err != nil {
-		log.Fatal(err)
+		listener, err := net.Listen("tcp", ":"+port)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		done := make(chan bool)
+		go http.Serve(listener, svr.Router())
+		log.Info(fmt.Sprintf("Listening on port %s", port))
+		<-done
 	}
 
 	done := make(chan bool)
-	go http.Serve(listener, Log(http.DefaultServeMux))
-	log.Info(fmt.Sprintf("Listening on port %v", port))
+	go httpsimple.Serve(svr)
+	log.Info(fmt.Sprintf("Listening on port %d", svr.Port))
 	<-done
 }
