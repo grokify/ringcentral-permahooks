@@ -19,7 +19,8 @@ import (
 	"github.com/grokify/simplego/net/urlutil"
 	"github.com/grokify/simplego/strconv/strconvutil"
 	"github.com/joho/godotenv"
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	rc "github.com/grokify/go-ringcentral/office/v1/client"
 	rcu "github.com/grokify/go-ringcentral/office/v1/util"
@@ -60,7 +61,7 @@ func setEventFilters() {
 }
 
 func webhookHandler(w http.ResponseWriter, r *http.Request) {
-	log.Info("Handling webhook...")
+	log.Info().Msg("Handling webhook...")
 	// Check to see if ValidationToken is present. If so, return
 	// it immediately.
 	validationToken := r.Header.Get(ValidationTokenHeader)
@@ -73,17 +74,22 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	// Read the body to check if this is a renewal event
 	httpBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Printf("Error reading body: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("FAIL - error reading webhook request message body.")
 		http.Error(w, "can't read body", http.StatusBadRequest)
 		return
 	}
-	log.Debug("Receiving Webhook....")
-	log.Debug(string(httpBody))
+	log.Debug().
+		Str("request_body", string(httpBody)).
+		Msg("Receiving Webhook....")
 
 	event := &rcu.Event{}
 	err = json.Unmarshal(httpBody, event)
 	if err != nil {
-		log.Warnf("JSON Unmarshal Error: %s", err.Error())
+		log.Warn().
+			Err(err).
+			Msg("FAIL - JSON Unmarshal error")
 		return
 	}
 
@@ -91,7 +97,9 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	if event.Event == RenewalEventFilter {
 		_, err := renewWebhook(event.SubscriptionId)
 		if err != nil {
-			log.Warnf("Error reading body: %v", err)
+			log.Warn().
+				Err(err).
+				Msg("Error reading body")
 			http.Error(w, "can't read body", http.StatusBadRequest)
 		}
 		return
@@ -118,10 +126,14 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 		hum.ContentTypeAppJsonUtf8,
 		bytes.NewBuffer(httpBody))
 	if err != nil {
-		log.Warnf("Downstream webhook error: %s", err.Error())
+		log.Warn().
+			Err(err).
+			Msg("Downstream webhook error")
 		return
 	} else if resp.StatusCode >= 300 {
-		log.Warnf("Downstream webhook error: %v", resp.StatusCode)
+		log.Warn().
+			Int("status_code", resp.StatusCode).
+			Msg("Downstream webhook error")
 		return
 	}
 }
@@ -129,12 +141,16 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 func createhookHandler(w http.ResponseWriter, r *http.Request) {
 	resp, err := createWebhook()
 	if err != nil {
-		log.Printf(err.Error())
+		log.Warn().
+			Err(err).
+			Msg("FAIL - create webhook")
 		return
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf(err.Error())
+		log.Warn().
+			Err(err).
+			Msg("FAIL - parse create webhook response body.")
 		return
 	}
 
@@ -145,12 +161,14 @@ func createhookHandler(w http.ResponseWriter, r *http.Request) {
 func renewhookHandler(w http.ResponseWriter, r *http.Request) {
 	_, err := renewWebhook()
 	if err != nil {
-		log.Printf(err.Error())
+		log.Warn().
+			Err(err).
+			Msg("FAIL - renew webhook.")
 	}
 }
 
 func createWebhook() (*http.Response, error) {
-	log.Info("Creating Hook...")
+	log.Info().Msg("Creating Hook...")
 	apiClient, err := newRingCentralClient()
 	if err != nil {
 		return nil, err
@@ -164,7 +182,9 @@ func createWebhook() (*http.Response, error) {
 		},
 		ExpiresIn: int32(ExpiresIn),
 	}
-	log.Info(jsonutil.MustMarshalString(req, true))
+	log.Debug().
+		Str("body", jsonutil.MustMarshalString(req, true)).
+		Msg("create_subscription_request_body")
 
 	return handleWebhookResponse(
 		apiClient.PushNotificationsApi.CreateSubscription(
@@ -179,10 +199,13 @@ func renewWebhook(subscriptionIds ...string) (*http.Response, error) {
 	if len(subscriptionIds) > 0 {
 		subscriptionId = subscriptionIds[0]
 	}
-	log.Debug(fmt.Sprintf("Renewing Hook Id %v ...", subscriptionId))
+	log.Info().
+		Str("hook_subscription_id", subscriptionId).
+		Msg("Renewing Webhook")
+
 	apiClient, err := newRingCentralClient()
 	if err != nil {
-		log.Printf("RENEW NEW RC CLIENT ERROR: %v", err.Error())
+		log.Warn().Err(err).Msg("RENEW NEW RC CLIENT ERROR")
 		return nil, err
 	}
 
@@ -196,11 +219,11 @@ func renewWebhook(subscriptionIds ...string) (*http.Response, error) {
 
 func handleInternalServerError(w http.ResponseWriter, logmessage string) {
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-	log.Warn(logmessage)
+	log.Warn().Msg(logmessage)
 }
 
 func listhooksHandler(w http.ResponseWriter, r *http.Request) {
-	log.Info("Getting Subscription List...")
+	log.Info().Msg("Getting Subscription List...")
 	apiClient, err := newRingCentralClient()
 	if err != nil {
 		handleInternalServerError(w, fmt.Sprintf("Listhooks: Error getting RC Client: %v", err.Error()))
@@ -231,7 +254,9 @@ func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err er
 	}
 
 	CurrentWebhookSubscriptionId = info.Id
-	log.Info(fmt.Sprintf("Created/renewed Webhook with Id: %s", CurrentWebhookSubscriptionId))
+	log.Info().
+		Str("hook_subscription_id", CurrentWebhookSubscriptionId).
+		Msg("Created/renewed Webhook")
 	return resp, nil
 }
 
@@ -275,7 +300,7 @@ type Server struct {
 
 func NewServer() Server {
 	svr := Server{
-		Port:       strconvutil.AtoiWithDefault(os.Getenv("PORT"), DefaultPortInt),
+		Port:       strconvutil.AtoiOrDefault(os.Getenv("PORT"), DefaultPortInt),
 		HTTPEngine: os.Getenv("HTTP_ENGINE"),
 	}
 	return svr
@@ -302,10 +327,10 @@ func (svr Server) Router() http.Handler {
 func main() {
 	err := loadEnv()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err)
 	}
 
-	log.SetLevel(log.DebugLevel)
+	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 
 	InboundWebhookUrl = strings.TrimSpace(os.Getenv("PERMAHOOKS_INBOUND_WEBHOOK_URL"))
 	OutboundWebhookUrl = strings.TrimSpace(os.Getenv("PERMAHOOKS_OUTBOUND_WEBHOOK_URL"))
@@ -313,15 +338,15 @@ func main() {
 	urlValidator := urlutil.URLValidator{RequiredSchemes: map[string]int{"https": 1}}
 	_, err = urlValidator.ValidateURLString(InboundWebhookUrl)
 	if err != nil {
-		log.Fatal(fmt.Sprintf("Environment variable [%v] error: %v",
-			"PERMAHOOKS_INBOUND_WEBHOOK_URL",
-			err.Error()))
+		log.Fatal().Err(err).
+			Str("environmentVariable", "PERMAHOOKS_INBOUND_WEBHOOK_URL").
+			Msg("Environment Variable Error")
 	}
 	_, err = urlValidator.ValidateURLString(OutboundWebhookUrl)
 	if err != nil {
-		log.Fatal(fmt.Sprintf("Environment variable [%v] error: %v",
-			"PERMAHOOKS_OUTBOUND_WEBHOOK_URL",
-			err.Error()))
+		log.Fatal().Err(err).
+			Str("environmentVariable", "PERMAHOOKS_OUTBOUND_WEBHOOK_URL").
+			Msg("Environment Variable Error")
 	}
 
 	svr := NewServer()
@@ -346,17 +371,17 @@ func main() {
 
 		listener, err := net.Listen("tcp", ":"+port)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err)
 		}
 
 		done := make(chan bool)
 		go http.Serve(listener, svr.Router())
-		log.Info(fmt.Sprintf("Listening on port %s", port))
+		log.Info().Str("port", port).Msg("Server listening")
 		<-done
 	}
 
 	done := make(chan bool)
 	go httpsimple.Serve(svr)
-	log.Info(fmt.Sprintf("Listening on port %d", svr.Port))
+	log.Info().Int("port", svr.Port).Msg("Server listening")
 	<-done
 }
