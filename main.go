@@ -22,8 +22,8 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	rc "github.com/grokify/go-ringcentral/office/v1/client"
-	rcu "github.com/grokify/go-ringcentral/office/v1/util"
+	rc "github.com/grokify/go-ringcentral-client/office/v1/client"
+	rcu "github.com/grokify/go-ringcentral-client/office/v1/util"
 	rco "github.com/grokify/oauth2more/ringcentral"
 )
 
