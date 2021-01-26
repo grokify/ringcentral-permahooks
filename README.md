@@ -124,6 +124,6 @@ If you have questions or support, please use the following resources:
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/ringcentral-permahooks
  [goreport-url]: https://goreportcard.com/report/github.com/grokify/ringcentral-permahooks
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/ringcentral-permahooks
- [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/ringcentral-permahooksfds
+ [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/ringcentral-permahooks
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-url]: https://github.com/grokify/ringcentral-permahooks/blob/master/LICENSE.md
