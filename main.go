@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/buaazp/fasthttprouter"
+	"github.com/grokify/oauth2more/credentials"
 	"github.com/grokify/simplego/encoding/jsonutil"
 	"github.com/grokify/simplego/fmt/fmtutil"
 	"github.com/grokify/simplego/net/http/httpsimple"
@@ -24,7 +25,6 @@ import (
 
 	rc "github.com/grokify/go-ringcentral-client/office/v1/client"
 	rcu "github.com/grokify/go-ringcentral-client/office/v1/util"
-	rco "github.com/grokify/oauth2more/ringcentral"
 )
 
 const (
@@ -262,17 +262,16 @@ func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err er
 
 func newRingCentralClient() (*rc.APIClient, error) {
 	return rcu.NewApiClientPassword(
-		rco.ApplicationCredentials{
+		credentials.ApplicationCredentials{
 			ServerURL:    os.Getenv("RINGCENTRAL_SERVER_URL"),
 			ClientID:     os.Getenv("RINGCENTRAL_CLIENT_ID"),
 			ClientSecret: os.Getenv("RINGCENTRAL_CLIENT_SECRET"),
 			AppName:      "github.com/grokify/ringcentral-permahooks",
 			AppVersion:   "0.0.1",
 		},
-		rco.PasswordCredentials{
-			Username:  os.Getenv("RINGCENTRAL_USERNAME"),
-			Extension: os.Getenv("RINGCENTRAL_EXTENSION"),
-			Password:  os.Getenv("RINGCENTRAL_PASSWORD"),
+		credentials.PasswordCredentials{
+			Username: os.Getenv("RINGCENTRAL_USERNAME"),
+			Password: os.Getenv("RINGCENTRAL_PASSWORD"),
 		},
 	)
 }
