@@ -12,13 +12,13 @@ import (
 	"strings"
 
 	"github.com/buaazp/fasthttprouter"
-	"github.com/grokify/oauth2more/credentials"
-	"github.com/grokify/simplego/encoding/jsonutil"
-	"github.com/grokify/simplego/fmt/fmtutil"
-	"github.com/grokify/simplego/net/http/httpsimple"
-	hum "github.com/grokify/simplego/net/httputilmore"
-	"github.com/grokify/simplego/net/urlutil"
-	"github.com/grokify/simplego/strconv/strconvutil"
+	"github.com/grokify/goauth/credentials"
+	"github.com/grokify/mogo/encoding/jsonutil"
+	"github.com/grokify/mogo/fmt/fmtutil"
+	"github.com/grokify/mogo/net/http/httpsimple"
+	"github.com/grokify/mogo/net/httputilmore"
+	"github.com/grokify/mogo/net/urlutil"
+	"github.com/grokify/mogo/strconv/strconvutil"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -123,7 +123,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	// Forward the body to the Webhook URL
 	resp, err := http.Post(
 		OutboundWebhookUrl,
-		hum.ContentTypeAppJsonUtf8,
+		httputilmore.ContentTypeAppJsonUtf8,
 		bytes.NewBuffer(httpBody))
 	if err != nil {
 		log.Warn().
@@ -154,7 +154,7 @@ func createhookHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set(hum.HeaderContentType, hum.ContentTypeAppJsonUtf8)
+	w.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJsonUtf8)
 	w.Write(body)
 }
 
@@ -242,7 +242,7 @@ func listhooksHandler(w http.ResponseWriter, r *http.Request) {
 		handleInternalServerError(w, fmt.Sprintf("Error calling GetSubscriptions API: ReadBody %v", err.Error()))
 		return
 	}
-	w.Header().Set(hum.HeaderContentType, hum.ContentTypeAppJsonUtf8)
+	w.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJsonUtf8)
 	w.Write(bytes)
 }
 
@@ -262,16 +262,14 @@ func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err er
 
 func newRingCentralClient() (*rc.APIClient, error) {
 	return rcu.NewApiClientPassword(
-		credentials.ApplicationCredentials{
+		credentials.OAuth2Credentials{
 			ServerURL:    os.Getenv("RINGCENTRAL_SERVER_URL"),
 			ClientID:     os.Getenv("RINGCENTRAL_CLIENT_ID"),
 			ClientSecret: os.Getenv("RINGCENTRAL_CLIENT_SECRET"),
 			AppName:      "github.com/grokify/ringcentral-permahooks",
 			AppVersion:   "0.0.1",
-		},
-		credentials.PasswordCredentials{
-			Username: os.Getenv("RINGCENTRAL_USERNAME"),
-			Password: os.Getenv("RINGCENTRAL_PASSWORD"),
+			Username:     os.Getenv("RINGCENTRAL_USERNAME"),
+			Password:     os.Getenv("RINGCENTRAL_PASSWORD"),
 		},
 	)
 }
