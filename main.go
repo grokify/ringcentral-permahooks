@@ -13,9 +13,9 @@ import (
 
 	"github.com/buaazp/fasthttprouter"
 	"github.com/grokify/goauth/credentials"
+	"github.com/grokify/gohttp/httpsimple"
 	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/fmt/fmtutil"
-	"github.com/grokify/mogo/net/http/httpsimple"
 	"github.com/grokify/mogo/net/httputilmore"
 	"github.com/grokify/mogo/net/urlutil"
 	"github.com/grokify/mogo/strconv/strconvutil"
@@ -262,7 +262,7 @@ func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err er
 
 func newRingCentralClient() (*rc.APIClient, error) {
 	return rcu.NewApiClientPassword(
-		credentials.OAuth2Credentials{
+		credentials.CredentialsOAuth2{
 			ServerURL:    os.Getenv("RINGCENTRAL_SERVER_URL"),
 			ClientID:     os.Getenv("RINGCENTRAL_CLIENT_ID"),
 			ClientSecret: os.Getenv("RINGCENTRAL_CLIENT_SECRET"),
