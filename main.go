@@ -105,19 +105,17 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if 1 == 1 {
-		evt, err := rcu.EventParseBytes(httpBody)
+	evt, err := rcu.EventParseBytes(httpBody)
+	if err != nil {
+		panic(err)
+	}
+	fmtutil.MustPrintJSON(evt)
+	if evt.IsEventType(rcu.InstantMessageEvent) {
+		body, err := evt.GetInstantMessageBody()
 		if err != nil {
 			panic(err)
 		}
-		fmtutil.MustPrintJSON(evt)
-		if evt.IsEventType(rcu.InstantMessageEvent) {
-			body, err := evt.GetInstantMessageBody()
-			if err != nil {
-				panic(err)
-			}
-			fmtutil.MustPrintJSON(body)
-		}
+		fmtutil.MustPrintJSON(body)
 	}
 
 	// Forward the body to the Webhook URL
