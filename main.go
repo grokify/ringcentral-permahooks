@@ -110,13 +110,13 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		fmtutil.PrintJSON(evt)
+		fmtutil.MustPrintJSON(evt)
 		if evt.IsEventType(rcu.InstantMessageEvent) {
 			body, err := evt.GetInstantMessageBody()
 			if err != nil {
 				panic(err)
 			}
-			fmtutil.PrintJSON(body)
+			fmtutil.MustPrintJSON(body)
 		}
 	}
 
