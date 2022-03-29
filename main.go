@@ -37,9 +37,9 @@ const (
 )
 
 var (
-	OutboundWebhookUrl           = ""                                  // Simple inbound webhook like Zapier or Chathooks
-	InboundWebhookUrl            = "https://12345678.ngrok.io/webhook" // Server URL the RingCentral API will send to
-	CurrentWebhookSubscriptionId = ""                                  // Current SubscriptionID to renew
+	OutboundWebhookURL           = ""                                  // Simple inbound webhook like Zapier or Chathooks
+	InboundWebhookURL            = "https://12345678.ngrok.io/webhook" // Server URL the RingCentral API will send to
+	CurrentWebhookSubscriptionID = ""                                  // Current SubscriptionID to renew
 	ExpiresIn                    = 60 * 60 * 24 * 7
 	RenewalThresholdTime         = 60 * 60 * 24
 	RenewalIntervalTime          = 60 * 60
@@ -122,8 +122,8 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Forward the body to the Webhook URL
 	resp, err := http.Post(
-		OutboundWebhookUrl,
-		httputilmore.ContentTypeAppJsonUtf8,
+		OutboundWebhookURL,
+		httputilmore.ContentTypeAppJSONUtf8,
 		bytes.NewBuffer(httpBody))
 	if err != nil {
 		log.Warn().
@@ -154,7 +154,7 @@ func createhookHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJsonUtf8)
+	w.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJSONUtf8)
 	w.Write(body)
 }
 
@@ -178,7 +178,7 @@ func createWebhook() (*http.Response, error) {
 		EventFilters: EventFilters,
 		DeliveryMode: rc.NotificationDeliveryModeRequest{
 			TransportType: "WebHook",
-			Address:       InboundWebhookUrl,
+			Address:       InboundWebhookURL,
 		},
 		ExpiresIn: int32(ExpiresIn),
 	}
@@ -194,13 +194,13 @@ func createWebhook() (*http.Response, error) {
 	)
 }
 
-func renewWebhook(subscriptionIds ...string) (*http.Response, error) {
-	subscriptionId := CurrentWebhookSubscriptionId
-	if len(subscriptionIds) > 0 {
-		subscriptionId = subscriptionIds[0]
+func renewWebhook(subscriptionIDs ...string) (*http.Response, error) {
+	subscriptionID := CurrentWebhookSubscriptionID
+	if len(subscriptionIDs) > 0 {
+		subscriptionID = subscriptionIDs[0]
 	}
 	log.Info().
-		Str("hook_subscription_id", subscriptionId).
+		Str("hook_subscription_id", subscriptionID).
 		Msg("Renewing Webhook")
 
 	apiClient, err := newRingCentralClient()
@@ -212,7 +212,7 @@ func renewWebhook(subscriptionIds ...string) (*http.Response, error) {
 	return handleWebhookResponse(
 		apiClient.PushNotificationsApi.RenewSubscription(
 			context.Background(),
-			subscriptionId,
+			subscriptionID,
 		),
 	)
 }
@@ -223,39 +223,39 @@ func handleInternalServerError(w http.ResponseWriter, logmessage string) {
 }
 
 func listhooksHandler(w http.ResponseWriter, r *http.Request) {
-	log.Info().Msg("Getting Subscription List...")
+	log.Info().Msg("getting subscription list...")
 	apiClient, err := newRingCentralClient()
 	if err != nil {
-		handleInternalServerError(w, fmt.Sprintf("Listhooks: Error getting RC Client: %v", err.Error()))
+		handleInternalServerError(w, fmt.Sprintf("listhooks: Error getting RC Client: %v", err.Error()))
 		return
 	}
 	info, resp, err := apiClient.PushNotificationsApi.GetSubscriptions(context.Background())
 	if err != nil {
-		handleInternalServerError(w, fmt.Sprintf("Error calling GetSubscriptions API: %v", err.Error()))
+		handleInternalServerError(w, fmt.Sprintf("error calling GetSubscriptions API: %v", err.Error()))
 		return
 	} else if resp.StatusCode >= 300 {
-		handleInternalServerError(w, fmt.Sprintf("Error calling GetSubscriptions API: Status %v", resp.StatusCode))
+		handleInternalServerError(w, fmt.Sprintf("error calling GetSubscriptions API: Status %v", resp.StatusCode))
 		return
 	}
 	bytes, err := json.MarshalIndent(info, "", "  ")
 	if err != nil {
-		handleInternalServerError(w, fmt.Sprintf("Error calling GetSubscriptions API: ReadBody %v", err.Error()))
+		handleInternalServerError(w, fmt.Sprintf("error calling GetSubscriptions API: ReadBody %v", err.Error()))
 		return
 	}
-	w.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJsonUtf8)
+	w.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJSONUtf8)
 	w.Write(bytes)
 }
 
 func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err error) (*http.Response, error) {
 	if err != nil {
-		return resp, fmt.Errorf("%v: %v", "API Response Err", err.Error())
+		return resp, fmt.Errorf("%v: %v", "api response Err", err.Error())
 	} else if resp.StatusCode > 299 {
-		return resp, fmt.Errorf("RingCentral Subscription API request failure status code: %v", resp.StatusCode)
+		return resp, fmt.Errorf("ringcentral subscription API request failure status code: %v", resp.StatusCode)
 	}
 
-	CurrentWebhookSubscriptionId = info.Id
+	CurrentWebhookSubscriptionID = info.Id
 	log.Info().
-		Str("hook_subscription_id", CurrentWebhookSubscriptionId).
+		Str("hook_subscription_id", CurrentWebhookSubscriptionID).
 		Msg("Created/renewed Webhook")
 	return resp, nil
 }
@@ -290,21 +290,21 @@ func Log(handler http.Handler) http.Handler {
 }
 
 type Server struct {
-	Port       int
-	HTTPEngine string
-	Testing    bool
+	Port          int
+	HTTPEngineRaw string
+	Testing       bool
 }
 
 func NewServer() Server {
 	svr := Server{
-		Port:       strconvutil.AtoiOrDefault(os.Getenv("PORT"), DefaultPortInt),
-		HTTPEngine: os.Getenv("HTTP_ENGINE"),
+		Port:          strconvutil.AtoiOrDefault(os.Getenv("PORT"), DefaultPortInt),
+		HTTPEngineRaw: os.Getenv("HTTP_ENGINE"),
 	}
 	return svr
 }
 
 func (svr Server) PortInt() int                       { return svr.Port }
-func (svr Server) HttpEngine() string                 { return svr.HTTPEngine }
+func (svr Server) HTTPEngine() string                 { return svr.HTTPEngineRaw }
 func (svr Server) RouterFast() *fasthttprouter.Router { return nil }
 
 func (svr Server) Router() http.Handler {
@@ -329,17 +329,17 @@ func main() {
 
 	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 
-	InboundWebhookUrl = strings.TrimSpace(os.Getenv("PERMAHOOKS_INBOUND_WEBHOOK_URL"))
-	OutboundWebhookUrl = strings.TrimSpace(os.Getenv("PERMAHOOKS_OUTBOUND_WEBHOOK_URL"))
+	InboundWebhookURL = strings.TrimSpace(os.Getenv("PERMAHOOKS_INBOUND_WEBHOOK_URL"))
+	OutboundWebhookURL = strings.TrimSpace(os.Getenv("PERMAHOOKS_OUTBOUND_WEBHOOK_URL"))
 
 	urlValidator := urlutil.URLValidator{RequiredSchemes: map[string]int{"https": 1}}
-	_, err = urlValidator.ValidateURLString(InboundWebhookUrl)
+	_, err = urlValidator.ValidateURLString(InboundWebhookURL)
 	if err != nil {
 		log.Fatal().Err(err).
 			Str("environmentVariable", "PERMAHOOKS_INBOUND_WEBHOOK_URL").
 			Msg("Environment Variable Error")
 	}
-	_, err = urlValidator.ValidateURLString(OutboundWebhookUrl)
+	_, err = urlValidator.ValidateURLString(OutboundWebhookURL)
 	if err != nil {
 		log.Fatal().Err(err).
 			Str("environmentVariable", "PERMAHOOKS_OUTBOUND_WEBHOOK_URL").
