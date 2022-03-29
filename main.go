@@ -48,6 +48,7 @@ var (
 // EventFilters determines the RingCentral events this service will subscribe to.
 // Threshold is the threshold time (in seconds) remaining before subscription expiration when server should start to send renewal reminder notifications. This time is approximate. It cannot be less than the interval of reminder job execution. It also cannot be greater than a half of this subscription TTL.
 // Interval is the interval (in seconds) between reminder notifications. This time is approximate. It cannot be less than the interval of reminder job execution. It also cannot be greater than a half of threshold value.
+
 var RenewalEventFilter = getRenewalEventFilter("~", RenewalThresholdTime, RenewalIntervalTime)
 var EventFilters = []string{SMSEventFilter, MessageStoreEventFilter, RenewalEventFilter}
 
