@@ -9,5 +9,5 @@ require (
 	github.com/grokify/gohttp v0.2.1
 	github.com/grokify/mogo v0.40.4
 	github.com/joho/godotenv v1.4.0
-	github.com/rs/zerolog v1.27.0
+	github.com/rs/zerolog v1.28.0
 )
