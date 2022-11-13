@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"os"
@@ -73,7 +73,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Read the body to check if this is a renewal event
-	httpBody, err := ioutil.ReadAll(r.Body)
+	httpBody, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Warn().
 			Err(err).
@@ -145,7 +145,7 @@ func createhookHandler(w http.ResponseWriter, r *http.Request) {
 			Msg("FAIL - create webhook")
 		return
 	}
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Warn().
 			Err(err).
