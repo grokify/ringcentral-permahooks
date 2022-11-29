@@ -7,7 +7,7 @@ require (
 	github.com/grokify/go-ringcentral-client v0.3.9
 	github.com/grokify/goauth v0.16.6
 	github.com/grokify/gohttp v0.2.2
-	github.com/grokify/mogo v0.41.6
+	github.com/grokify/mogo v0.41.10
 	github.com/joho/godotenv v1.4.0
 	github.com/rs/zerolog v1.28.0
 )
