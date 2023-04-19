@@ -18,7 +18,6 @@ Deployment options:
 
 * Run locally: only the `main.go` file is necessary as shown below.
 * Lambda: TBD, will use [aws/aws-lambda-go](https://github.com/aws/aws-lambda-go) like [Chathooks](https://github.com/grokify/chathooks)
-* Heroku: TBD, investigating best way to vendor deps for Heroku.
 
 See more information about creating RingCentral webhooks here:
 
@@ -123,7 +122,7 @@ If you have questions or support, please use the following resources:
 * Stack Overflow: https://stackoverflow.com/questions/tagged/ringcentral
 * GitHub: https://github.com/grokify/ringcentral-permahooks/issues
 
- [build-status-svg]: https://github.com/grokify/ringcentral-permahooks/workflows/build/badge.svg
+ [build-status-svg]: https://github.com/grokify/ringcentral-permahooks/workflows/test/badge.svg
  [build-status-url]: https://github.com/grokify/ringcentral-permahooks/actions
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/ringcentral-permahooks
  [goreport-url]: https://goreportcard.com/report/github.com/grokify/ringcentral-permahooks
