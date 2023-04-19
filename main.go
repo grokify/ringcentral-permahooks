@@ -6,13 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"net"
 	"net/http"
 	"os"
 	"strings"
 
 	"github.com/buaazp/fasthttprouter"
-	"github.com/grokify/goauth/credentials"
+	"github.com/grokify/goauth"
 	"github.com/grokify/gohttp/httpsimple"
 	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/fmt/fmtutil"
@@ -96,12 +95,16 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 
 	// If this is renewal event, renew the webhook and return.
 	if event.Event == RenewalEventFilter {
-		_, err := renewWebhook(event.SubscriptionId)
+		resp, err := renewWebhook(event.SubscriptionId)
 		if err != nil {
 			log.Warn().
 				Err(err).
 				Msg("Error reading body")
 			http.Error(w, "can't read body", http.StatusBadRequest)
+		} else if resp.StatusCode >= 400 {
+			log.Warn().
+				Msg(fmt.Sprintf("Error renewing webhook (%d)", resp.StatusCode))
+			http.Error(w, "error renewing webhook", http.StatusBadRequest)
 		}
 		return
 	}
@@ -123,7 +126,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Post(
 		OutboundWebhookURL,
 		httputilmore.ContentTypeAppJSONUtf8,
-		bytes.NewBuffer(httpBody))
+		bytes.NewBuffer(httpBody)) // #nosec G107
 	if err != nil {
 		log.Warn().
 			Err(err).
@@ -154,7 +157,13 @@ func createhookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJSONUtf8)
-	w.Write(body)
+	_, err = w.Write(body)
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("FAIL - write response body")
+		return
+	}
 }
 
 func renewhookHandler(w http.ResponseWriter, r *http.Request) {
@@ -242,7 +251,13 @@ func listhooksHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set(httputilmore.HeaderContentType, httputilmore.ContentTypeAppJSONUtf8)
-	w.Write(bytes)
+	_, err = w.Write(bytes)
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("FAIL - write response body")
+		return
+	}
 }
 
 func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err error) (*http.Response, error) {
@@ -261,7 +276,7 @@ func handleWebhookResponse(info rc.SubscriptionInfo, resp *http.Response, err er
 
 func newRingCentralClient() (*rc.APIClient, error) {
 	return rcu.NewApiClientPassword(
-		credentials.CredentialsOAuth2{
+		goauth.CredentialsOAuth2{
 			ServerURL:    os.Getenv("RINGCENTRAL_SERVER_URL"),
 			ClientID:     os.Getenv("RINGCENTRAL_CLIENT_ID"),
 			ClientSecret: os.Getenv("RINGCENTRAL_CLIENT_SECRET"),
@@ -357,24 +372,26 @@ func main() {
 	}
 	setEventFilters()
 
-	if 1 == 0 {
-		// Check PORT env. This environment variable name is hard coded to work
-		// with Heroku which will auto-assign a port using this name
-		port := os.Getenv("PORT")
-		if len(strings.TrimSpace(port)) == 0 {
-			port = DefaultPort
-		}
+	/*
+		if 1 == 0 {
+			// Check PORT env. This environment variable name is hard coded to work
+			// with Heroku which will auto-assign a port using this name
+			port := os.Getenv("PORT")
+			if len(strings.TrimSpace(port)) == 0 {
+				port = DefaultPort
+			}
 
-		listener, err := net.Listen("tcp", ":"+port)
-		if err != nil {
-			log.Fatal().Err(err)
-		}
+			listener, err := net.Listen("tcp", ":"+port)
+			if err != nil {
+				log.Fatal().Err(err)
+			}
 
-		done := make(chan bool)
-		go http.Serve(listener, svr.Router())
-		log.Info().Str("port", port).Msg("Server listening")
-		<-done
-	}
+			done := make(chan bool)
+			go http.Serve(listener, svr.Router())
+			log.Info().Str("port", port).Msg("Server listening")
+			<-done
+		}
+	*/
 
 	done := make(chan bool)
 	go httpsimple.Serve(svr)
