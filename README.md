@@ -101,6 +101,10 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
 
 Docker repo: https://hub.docker.com/r/grokify/ringcentral-permahooks
 
+1. Build: `% docker build -t grokify/ringcentral-permahooks:v0.2.3 .`
+1. Login: `% docker login -u [username] -p [password]`
+1. Push: `% docker push grokify/ringcentral-permahooks:v0.2.3`
+
 ### Heroku Support
 
 Heroku support is under investigation. For Heroku, dependences are managed with `godep`. The following is used:
