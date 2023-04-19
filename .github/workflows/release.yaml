@@ -9,7 +9,7 @@
 
 # Source: https://docs.github.com/en/actions/publishing-packages/publishing-docker-images
 
-name: publishondockerhub
+name: release
 
 on:
   release:
