@@ -9,7 +9,7 @@ require (
 	github.com/grokify/gohttp v0.2.5
 	github.com/grokify/mogo v0.50.0
 	github.com/joho/godotenv v1.5.1
-	github.com/rs/zerolog v1.29.1
+	github.com/rs/zerolog v1.30.0
 )
 
 require (
