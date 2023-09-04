@@ -12,6 +12,7 @@ import (
 
 	"github.com/buaazp/fasthttprouter"
 	"github.com/grokify/goauth"
+	"github.com/grokify/goauth/ringcentral"
 	"github.com/grokify/gohttp/httpsimple"
 	"github.com/grokify/mogo/encoding/jsonutil"
 	"github.com/grokify/mogo/fmt/fmtutil"
@@ -280,10 +281,12 @@ func newRingCentralClient() (*rc.APIClient, error) {
 			ServerURL:    os.Getenv("RINGCENTRAL_SERVER_URL"),
 			ClientID:     os.Getenv("RINGCENTRAL_CLIENT_ID"),
 			ClientSecret: os.Getenv("RINGCENTRAL_CLIENT_SECRET"),
-			AppName:      "github.com/grokify/ringcentral-permahooks",
-			AppVersion:   "0.0.1",
 			Username:     os.Getenv("RINGCENTRAL_USERNAME"),
 			Password:     os.Getenv("RINGCENTRAL_PASSWORD"),
+			PasswordOpts: map[string][]string{
+				ringcentral.ConfKeyAppName:    {"github.com/grokify/ringcentral-permahooks"},
+				ringcentral.ConfKeyAppVersion: {"0.0.1"},
+			},
 		},
 	)
 }
