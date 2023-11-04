@@ -4,6 +4,7 @@
 [![Go Report Card][goreport-svg]][goreport-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
 [![License][license-svg]][license-url]
+[![Docker Pulls][docker-hub-svg]][docker-hub-url]
 
 This is a small app that turns RingCentral's expiring outbound webhooks into non-expiring webhooks. This is especially useful when connecting to a service with a simple inbound webhook implementation such as Zapier and chat solutions like [Glip](https://glip.com). Benefits include:
 
@@ -134,3 +135,5 @@ If you have questions or support, please use the following resources:
  [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/ringcentral-permahooks
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-url]: https://github.com/grokify/ringcentral-permahooks/blob/master/LICENSE.md
+ [docker-hub-svg]: https://img.shields.io/docker/pulls/grokify/ringcentral-permahooks?logo=docker&label=docker%20pulls%20%2F%20ringcentral-permahooks
+ [docker-hub-url]: https://hub.docker.com/r/grokify/ringcentral-permahooks
