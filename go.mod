@@ -11,7 +11,7 @@ require (
 	github.com/grokify/gohttp v0.2.7
 	github.com/grokify/mogo v0.62.6
 	github.com/joho/godotenv v1.5.1
-	github.com/rs/zerolog v1.31.0
+	github.com/rs/zerolog v1.32.0
 )
 
 require (
