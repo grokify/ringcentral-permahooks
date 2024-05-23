@@ -8,7 +8,7 @@ toolchain go1.22.2
 
 require (
 	github.com/buaazp/fasthttprouter v0.1.1
-	github.com/grokify/go-ringcentral-client v0.3.20
+	github.com/grokify/go-ringcentral-client v0.3.21
 	github.com/grokify/goauth v0.21.0
 	github.com/grokify/gohttp v0.2.7
 	github.com/grokify/mogo v0.63.11
