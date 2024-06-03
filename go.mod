@@ -11,7 +11,7 @@ require (
 	github.com/grokify/go-ringcentral-client v0.3.20
 	github.com/grokify/goauth v0.21.0
 	github.com/grokify/gohttp v0.2.7
-	github.com/grokify/mogo v0.63.11
+	github.com/grokify/mogo v0.64.3
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/zerolog v1.32.0
 )
@@ -53,7 +53,7 @@ require (
 	go.opentelemetry.io/otel/metric v1.26.0 // indirect
 	go.opentelemetry.io/otel/trace v1.26.0 // indirect
 	golang.org/x/crypto v0.23.0 // indirect
-	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
+	golang.org/x/exp v0.0.0-20240531132922-fd00a4e0eefc // indirect
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/oauth2 v0.20.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
