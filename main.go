@@ -283,7 +283,7 @@ func newRingCentralClient() (*rc.APIClient, error) {
 			ClientSecret: os.Getenv("RINGCENTRAL_CLIENT_SECRET"),
 			Username:     os.Getenv("RINGCENTRAL_USERNAME"),
 			Password:     os.Getenv("RINGCENTRAL_PASSWORD"),
-			PasswordOpts: map[string][]string{
+			TokenBodyOpts: map[string][]string{
 				ringcentral.ConfKeyAppName:    {"github.com/grokify/ringcentral-permahooks"},
 				ringcentral.ConfKeyAppVersion: {"0.0.1"},
 			},
