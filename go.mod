@@ -7,15 +7,15 @@ toolchain go1.22.2
 require (
 	github.com/buaazp/fasthttprouter v0.1.1
 	github.com/grokify/go-ringcentral-client v0.3.22
-	github.com/grokify/goauth v0.21.9
+	github.com/grokify/goauth v0.21.10
 	github.com/grokify/gohttp v0.2.7
-	github.com/grokify/mogo v0.64.7
+	github.com/grokify/mogo v0.64.8
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/zerolog v1.33.0
 )
 
 require (
-	cloud.google.com/go/auth v0.8.0 // indirect
+	cloud.google.com/go/auth v0.8.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.4 // indirect
 	cloud.google.com/go/compute/metadata v0.5.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
@@ -55,8 +55,8 @@ require (
 	golang.org/x/oauth2 v0.22.0 // indirect
 	golang.org/x/sys v0.24.0 // indirect
 	golang.org/x/text v0.17.0 // indirect
-	google.golang.org/api v0.191.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240808171019-573a1156607a // indirect
+	google.golang.org/api v0.192.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240814211410-ddb44dafa142 // indirect
 	google.golang.org/grpc v1.65.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 )
