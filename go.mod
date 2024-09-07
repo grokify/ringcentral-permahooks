@@ -2,8 +2,6 @@ module github.com/grokify/ringcentral-permahooks
 
 go 1.23
 
-toolchain go1.23.0
-
 require (
 	github.com/buaazp/fasthttprouter v0.1.1
 	github.com/grokify/go-ringcentral-client v0.3.23
