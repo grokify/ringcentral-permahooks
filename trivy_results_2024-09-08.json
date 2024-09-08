@@ -1,0 +1,418 @@
+{
+  "SchemaVersion": 2,
+  "ArtifactName": "grokify/ringcentral-permahooks:v0.2.14",
+  "ArtifactType": "container_image",
+  "Metadata": {
+    "OS": {
+      "Family": "alpine",
+      "Name": "3.20.3"
+    },
+    "ImageID": "sha256:31a94781c03531779b06913d1a6a52abe4dbb0331571279e59cf13c806027e91",
+    "DiffIDs": [
+      "sha256:63ca1fbb43ae5034640e5e6cb3e083e05c290072c5366fcaa9d62435a4cced85",
+      "sha256:46d74c9366e6027590554d38ee6893e5ed94f42dafd7b4d91eec17600737fa1c",
+      "sha256:49ee218c750827f4f2437392fdcf893c0cd1d601a0390ebfb99e79adaa4561b7",
+      "sha256:1e0d933bc7f6b8eb6d0643d70974bb813ef2321df24f3c5d9fb9335558db2985",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:e8869b71150ac55a66868b9acd4f0e3e015316253ecaf4dc2a6cd89068aa567e",
+      "sha256:ca4bb19c1a7dca9b8640473f6843040cbb934c4cc8f4af7c506f35b03a8a110f",
+      "sha256:a3d6142202890406aa473b2abe14f4421f5fe5268c39e7928ae10799995f746b",
+      "sha256:3968cfb490ba6b08196537244b96a60b0f48f98ba6638728c06cf01914deec0b",
+      "sha256:71373496d5e4d838c04f1b0bdc0557f5506f684af5dcc072a1a976acbae15e06",
+      "sha256:703e462f743d68136e79ad56a7d739ec354f4bc6b43347415164e2aa9be9a6bd"
+    ],
+    "RepoTags": [
+      "grokify/ringcentral-permahooks:v0.2.14"
+    ],
+    "RepoDigests": [
+      "grokify/ringcentral-permahooks@sha256:01583e25272171d355519b9f858f66e23cdacee3c26295d93da35669c0496982"
+    ],
+    "ImageConfig": {
+      "architecture": "amd64",
+      "created": "2024-09-07T11:14:36.897619366Z",
+      "history": [
+        {
+          "created": "2024-09-05T16:50:05Z",
+          "created_by": "/bin/sh -c #(nop) ADD file:5758b97d8301c84a204a6e516241275d785a7cade40b2fb99f01fe122482e283 in / "
+        },
+        {
+          "created": "2024-09-05T16:50:05Z",
+          "created_by": "/bin/sh -c #(nop)  CMD [\"/bin/sh\"]",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-05T16:50:05Z",
+          "created_by": "RUN /bin/sh -c apk add --no-cache ca-certificates # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-05T16:50:05Z",
+          "created_by": "ENV GOLANG_VERSION=1.23.1",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-05T16:50:05Z",
+          "created_by": "ENV GOTOOLCHAIN=local",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-05T16:50:05Z",
+          "created_by": "ENV GOPATH=/go",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-05T16:50:05Z",
+          "created_by": "ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-05T16:50:05Z",
+          "created_by": "COPY /target/ / # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-05T16:50:05Z",
+          "created_by": "RUN /bin/sh -c mkdir -p \"$GOPATH/src\" \"$GOPATH/bin\" \u0026\u0026 chmod -R 1777 \"$GOPATH\" # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-05T16:50:05Z",
+          "created_by": "WORKDIR /go",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-07T11:14:07.870918528Z",
+          "created_by": "WORKDIR /app",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-07T11:14:07.880227519Z",
+          "created_by": "COPY go.mod ./ # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-07T11:14:07.888834414Z",
+          "created_by": "COPY go.sum ./ # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-07T11:14:14.26489628Z",
+          "created_by": "RUN /bin/sh -c go mod download # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-07T11:14:14.278365104Z",
+          "created_by": "COPY *.go ./ # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-07T11:14:36.897619366Z",
+          "created_by": "RUN /bin/sh -c go build -o /ringcentral-permahooks # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-07T11:14:36.897619366Z",
+          "created_by": "EXPOSE map[8080/tcp:{}]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-07T11:14:36.897619366Z",
+          "created_by": "CMD [\"/ringcentral-permahooks\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        }
+      ],
+      "os": "linux",
+      "rootfs": {
+        "type": "layers",
+        "diff_ids": [
+          "sha256:63ca1fbb43ae5034640e5e6cb3e083e05c290072c5366fcaa9d62435a4cced85",
+          "sha256:46d74c9366e6027590554d38ee6893e5ed94f42dafd7b4d91eec17600737fa1c",
+          "sha256:49ee218c750827f4f2437392fdcf893c0cd1d601a0390ebfb99e79adaa4561b7",
+          "sha256:1e0d933bc7f6b8eb6d0643d70974bb813ef2321df24f3c5d9fb9335558db2985",
+          "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+          "sha256:e8869b71150ac55a66868b9acd4f0e3e015316253ecaf4dc2a6cd89068aa567e",
+          "sha256:ca4bb19c1a7dca9b8640473f6843040cbb934c4cc8f4af7c506f35b03a8a110f",
+          "sha256:a3d6142202890406aa473b2abe14f4421f5fe5268c39e7928ae10799995f746b",
+          "sha256:3968cfb490ba6b08196537244b96a60b0f48f98ba6638728c06cf01914deec0b",
+          "sha256:71373496d5e4d838c04f1b0bdc0557f5506f684af5dcc072a1a976acbae15e06",
+          "sha256:703e462f743d68136e79ad56a7d739ec354f4bc6b43347415164e2aa9be9a6bd"
+        ]
+      },
+      "config": {
+        "Cmd": [
+          "/ringcentral-permahooks"
+        ],
+        "Env": [
+          "PATH=/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "GOLANG_VERSION=1.23.1",
+          "GOTOOLCHAIN=local",
+          "GOPATH=/go"
+        ],
+        "Labels": {
+          "org.opencontainers.image.created": "2024-09-07T11:13:50.740Z",
+          "org.opencontainers.image.description": "Webhook proxy to turn RingCentral webhooks into permanent webhooks for use with services like Zapier Instant Triggers.",
+          "org.opencontainers.image.licenses": "MIT",
+          "org.opencontainers.image.revision": "1f0625eb5f04c0f1b8f59e53ba001e88d6fe76f7",
+          "org.opencontainers.image.source": "https://github.com/grokify/ringcentral-permahooks",
+          "org.opencontainers.image.title": "ringcentral-permahooks",
+          "org.opencontainers.image.url": "https://github.com/grokify/ringcentral-permahooks",
+          "org.opencontainers.image.version": "v0.2.14"
+        },
+        "WorkingDir": "/app",
+        "ExposedPorts": {
+          "8080/tcp": {}
+        },
+        "ArgsEscaped": true
+      }
+    }
+  },
+  "Results": [
+    {
+      "Target": "grokify/ringcentral-permahooks:v0.2.14 (alpine 3.20.3)",
+      "Class": "os-pkgs",
+      "Type": "alpine"
+    },
+    {
+      "Target": "",
+      "Class": "lang-pkgs",
+      "Type": "gobinary",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2024-24792",
+          "PkgName": "golang.org/x/image",
+          "InstalledVersion": "0.16.0",
+          "FixedVersion": "0.18.0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:59a71c7be07d2b5be739908b75aae0d35b3dc8b2711b4147bcb9b96d6295674e",
+            "DiffID": "sha256:3968cfb490ba6b08196537244b96a60b0f48f98ba6638728c06cf01914deec0b"
+          },
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-24792",
+          "PkgRef": "pkg:golang/golang.org/x/image@0.16.0",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory Go",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Ago"
+          },
+          "Title": "Parsing a corrupt or malicious image with invalid color indices can ca ...",
+          "Description": "Parsing a corrupt or malicious image with invalid color indices can cause a panic.",
+          "Severity": "HIGH",
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://cs.opensource.google/go/x/image",
+            "https://go.dev/cl/588115",
+            "https://go.dev/issue/67624",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-24792",
+            "https://pkg.go.dev/vuln/GO-2024-2937"
+          ],
+          "PublishedDate": "2024-06-27T18:15:13.74Z",
+          "LastModifiedDate": "2024-08-01T13:47:30.627Z"
+        }
+      ]
+    },
+    {
+      "Target": "/go/pkg/mod/google.golang.org/api@v0.196.0/appengine/v1beta/appengine-api.json",
+      "Class": "secret",
+      "Secrets": [
+        {
+          "RuleID": "private-key",
+          "Category": "AsymmetricPrivateKey",
+          "Severity": "HIGH",
+          "Title": "Asymmetric Private Key",
+          "StartLine": 2306,
+          "EndLine": 2306,
+          "Code": {
+            "Lines": [
+              {
+                "Number": 2304,
+                "Content": "      \"properties\": {",
+                "IsCause": false,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "      \"properties\": {",
+                "FirstCause": false,
+                "LastCause": false
+              },
+              {
+                "Number": 2305,
+                "Content": "        \"privateKey\": {",
+                "IsCause": false,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "        \"privateKey\": {",
+                "FirstCause": false,
+                "LastCause": false
+              },
+              {
+                "Number": 2306,
+                "Content": "          \"description\": \"Unencrypted PEM encoded RSA private key. This field is set once on certificate creation and then encrypted. The key size must be 2048 bits or fewer. Must include the header and footer. Example: -----BEGIN RSA PRIVATE KEY-----*-----END RSA PRIVATE KEY----- @InputOnly\",",
+                "IsCause": true,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "          \"description\": \"Unencrypted PEM encoded RSA private key. This field is set once on certificate creation and then encrypted. The key size must be 2048 bits or fewer. Must include the header and footer. Example: -----BEGIN RSA PRIVATE KEY-----*-----END RSA PRIVATE KEY----- @InputOnly\",",
+                "FirstCause": true,
+                "LastCause": true
+              },
+              {
+                "Number": 2307,
+                "Content": "          \"type\": \"string\"",
+                "IsCause": false,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "          \"type\": \"string\"",
+                "FirstCause": false,
+                "LastCause": false
+              }
+            ]
+          },
+          "Match": "----BEGIN RSA PRIVATE KEY-----*-----END RSA PRIVATE",
+          "Layer": {
+            "Digest": "sha256:59a71c7be07d2b5be739908b75aae0d35b3dc8b2711b4147bcb9b96d6295674e",
+            "DiffID": "sha256:3968cfb490ba6b08196537244b96a60b0f48f98ba6638728c06cf01914deec0b",
+            "CreatedBy": "RUN /bin/sh -c go mod download # buildkit"
+          }
+        }
+      ]
+    },
+    {
+      "Target": "/go/pkg/mod/google.golang.org/api@v0.196.0/appengine/v1/appengine-api.json",
+      "Class": "secret",
+      "Secrets": [
+        {
+          "RuleID": "private-key",
+          "Category": "AsymmetricPrivateKey",
+          "Severity": "HIGH",
+          "Title": "Asymmetric Private Key",
+          "StartLine": 2088,
+          "EndLine": 2088,
+          "Code": {
+            "Lines": [
+              {
+                "Number": 2086,
+                "Content": "      \"properties\": {",
+                "IsCause": false,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "      \"properties\": {",
+                "FirstCause": false,
+                "LastCause": false
+              },
+              {
+                "Number": 2087,
+                "Content": "        \"privateKey\": {",
+                "IsCause": false,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "        \"privateKey\": {",
+                "FirstCause": false,
+                "LastCause": false
+              },
+              {
+                "Number": 2088,
+                "Content": "          \"description\": \"Unencrypted PEM encoded RSA private key. This field is set once on certificate creation and then encrypted. The key size must be 2048 bits or fewer. Must include the header and footer. Example: -----BEGIN RSA PRIVATE KEY-----*-----END RSA PRIVATE KEY----- @InputOnly\",",
+                "IsCause": true,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "          \"description\": \"Unencrypted PEM encoded RSA private key. This field is set once on certificate creation and then encrypted. The key size must be 2048 bits or fewer. Must include the header and footer. Example: -----BEGIN RSA PRIVATE KEY-----*-----END RSA PRIVATE KEY----- @InputOnly\",",
+                "FirstCause": true,
+                "LastCause": true
+              },
+              {
+                "Number": 2089,
+                "Content": "          \"type\": \"string\"",
+                "IsCause": false,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "          \"type\": \"string\"",
+                "FirstCause": false,
+                "LastCause": false
+              }
+            ]
+          },
+          "Match": "----BEGIN RSA PRIVATE KEY-----*-----END RSA PRIVATE",
+          "Layer": {
+            "Digest": "sha256:59a71c7be07d2b5be739908b75aae0d35b3dc8b2711b4147bcb9b96d6295674e",
+            "DiffID": "sha256:3968cfb490ba6b08196537244b96a60b0f48f98ba6638728c06cf01914deec0b",
+            "CreatedBy": "RUN /bin/sh -c go mod download # buildkit"
+          }
+        }
+      ]
+    },
+    {
+      "Target": "/go/pkg/mod/google.golang.org/api@v0.196.0/appengine/v1alpha/appengine-api.json",
+      "Class": "secret",
+      "Secrets": [
+        {
+          "RuleID": "private-key",
+          "Category": "AsymmetricPrivateKey",
+          "Severity": "HIGH",
+          "Title": "Asymmetric Private Key",
+          "StartLine": 1023,
+          "EndLine": 1023,
+          "Code": {
+            "Lines": [
+              {
+                "Number": 1021,
+                "Content": "      \"properties\": {",
+                "IsCause": false,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "      \"properties\": {",
+                "FirstCause": false,
+                "LastCause": false
+              },
+              {
+                "Number": 1022,
+                "Content": "        \"privateKey\": {",
+                "IsCause": false,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "        \"privateKey\": {",
+                "FirstCause": false,
+                "LastCause": false
+              },
+              {
+                "Number": 1023,
+                "Content": "          \"description\": \"Unencrypted PEM encoded RSA private key. This field is set once on certificate creation and then encrypted. The key size must be 2048 bits or fewer. Must include the header and footer. Example: -----BEGIN RSA PRIVATE KEY-----*-----END RSA PRIVATE KEY----- @InputOnly\",",
+                "IsCause": true,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "          \"description\": \"Unencrypted PEM encoded RSA private key. This field is set once on certificate creation and then encrypted. The key size must be 2048 bits or fewer. Must include the header and footer. Example: -----BEGIN RSA PRIVATE KEY-----*-----END RSA PRIVATE KEY----- @InputOnly\",",
+                "FirstCause": true,
+                "LastCause": true
+              },
+              {
+                "Number": 1024,
+                "Content": "          \"type\": \"string\"",
+                "IsCause": false,
+                "Annotation": "",
+                "Truncated": false,
+                "Highlighted": "          \"type\": \"string\"",
+                "FirstCause": false,
+                "LastCause": false
+              }
+            ]
+          },
+          "Match": "----BEGIN RSA PRIVATE KEY-----*-----END RSA PRIVATE",
+          "Layer": {
+            "Digest": "sha256:59a71c7be07d2b5be739908b75aae0d35b3dc8b2711b4147bcb9b96d6295674e",
+            "DiffID": "sha256:3968cfb490ba6b08196537244b96a60b0f48f98ba6638728c06cf01914deec0b",
+            "CreatedBy": "RUN /bin/sh -c go mod download # buildkit"
+          }
+        }
+      ]
+    }
+  ]
+}
