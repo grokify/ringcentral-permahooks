@@ -6,8 +6,8 @@ require (
 	github.com/buaazp/fasthttprouter v0.1.1
 	github.com/grokify/go-ringcentral-client v0.3.23
 	github.com/grokify/goauth v0.22.3
-	github.com/grokify/mogo v0.65.3
-	github.com/grokify/sogo v0.8.13
+	github.com/grokify/mogo v0.65.5
+	github.com/grokify/sogo v0.8.14
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/zerolog v1.33.0
 )
@@ -57,5 +57,5 @@ require (
 	google.golang.org/api v0.205.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241104194629-dd2ea8efbc28 // indirect
 	google.golang.org/grpc v1.68.0 // indirect
-	google.golang.org/protobuf v1.35.1 // indirect
+	google.golang.org/protobuf v1.35.2 // indirect
 )
