@@ -5,7 +5,7 @@
 This is an example comparison of using Alpine and Chainguard based images performed on Nov 11, 2024 for
 the Chainguard course "Painless Vulnerability Management" Final Project.
 
-The results show that Alpine has 2 fixed medium vulnerabilities and Chainuard as 0 vulerabilites.
+The results show that Alpine has 2 fixed medium vulnerabilities and Chainguard as 0 vulerabilites.
 
 1. `golang:1.23-alpine` (2 fixed medium vulnerabilites)
 
