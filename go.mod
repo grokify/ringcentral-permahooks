@@ -6,7 +6,7 @@ require (
 	github.com/buaazp/fasthttprouter v0.1.1
 	github.com/grokify/go-ringcentral-client v0.3.23
 	github.com/grokify/goauth v0.22.4
-	github.com/grokify/mogo v0.65.5
+	github.com/grokify/mogo v0.65.6
 	github.com/grokify/sogo v0.8.14
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/zerolog v1.33.0

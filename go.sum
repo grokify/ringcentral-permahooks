@@ -81,8 +81,8 @@ github.com/grokify/go-scim-client v0.1.21 h1:e946JVDh3p3/zfTkOAmFsEM3Za9R7E5p8SZ
 github.com/grokify/go-scim-client v0.1.21/go.mod h1:qe9dXjJPeGsAXQV6z7/Umhuok/qlId495y/DeXQkv5c=
 github.com/grokify/goauth v0.22.4 h1:46O1BSomTUENwBRt4TiD7qcnzAqP0qP9K6akOXnoCQ4=
 github.com/grokify/goauth v0.22.4/go.mod h1:eITfNWR7hcLmRz+Hf5WWR3e4zwx30UeQFmQ/7FFR9kg=
-github.com/grokify/mogo v0.65.5 h1:ifDwXUQNeFIi27sKk2kp/TYiseo2imMuVbPGA/zBGjM=
-github.com/grokify/mogo v0.65.5/go.mod h1:q0uXqdhW6F4VJZ5iTJqi34GMewjZr6Q48ZbAigBYfpQ=
+github.com/grokify/mogo v0.65.6 h1:ToL6pl/WRb4p+pB9iObm/HK1jLM/uDIaLCknQOJg7q8=
+github.com/grokify/mogo v0.65.6/go.mod h1:q0uXqdhW6F4VJZ5iTJqi34GMewjZr6Q48ZbAigBYfpQ=
 github.com/grokify/sogo v0.8.14 h1:81h+TqKWPsupyL0Gnz+MPYjFQ7pFWVMGZgQj76y4g8s=
 github.com/grokify/sogo v0.8.14/go.mod h1:idLTkVoZo9USd61j533eEoVAUBq/btadK1OtPaT0+7E=
 github.com/huandu/xstrings v1.5.0 h1:2ag3IFq9ZDANvthTwTiqSSZLjDc+BedvHPAp5tJy2TI=
