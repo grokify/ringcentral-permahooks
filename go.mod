@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/buaazp/fasthttprouter v0.1.1
-	github.com/grokify/go-ringcentral-client v0.3.23
+	github.com/grokify/go-ringcentral-client v0.3.24
 	github.com/grokify/goauth v0.22.4
 	github.com/grokify/mogo v0.65.6
 	github.com/grokify/sogo v0.8.14
@@ -30,7 +30,7 @@ require (
 	github.com/googleapis/enterprise-certificate-proxy v0.3.4 // indirect
 	github.com/googleapis/gax-go/v2 v2.14.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
-	github.com/grokify/go-scim-client v0.1.21 // indirect
+	github.com/grokify/go-scim-client v0.1.22 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
 	github.com/jessevdk/go-flags v1.6.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
