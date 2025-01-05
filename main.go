@@ -40,7 +40,7 @@ var (
 	OutboundWebhookURL           = ""                                  // Simple inbound webhook like Zapier or Chathooks
 	InboundWebhookURL            = "https://12345678.ngrok.io/webhook" // Server URL the RingCentral API will send to
 	CurrentWebhookSubscriptionID = ""                                  // Current SubscriptionID to renew
-	ExpiresIn                    = 60 * 60 * 24 * 7
+	ExpiresIn                    = int32(60 * 60 * 24 * 7)
 	RenewalThresholdTime         = 60 * 60 * 24
 	RenewalIntervalTime          = 60 * 60
 )
@@ -189,7 +189,7 @@ func createWebhook() (*http.Response, error) {
 			TransportType: "WebHook",
 			Address:       InboundWebhookURL,
 		},
-		ExpiresIn: int32(ExpiresIn),
+		ExpiresIn: ExpiresIn,
 	}
 	log.Debug().
 		Str("body", jsonutil.MustMarshalString(req, true)).
