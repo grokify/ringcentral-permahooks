@@ -1,6 +1,7 @@
 # RingCentral Permahooks
 
 [![Build Status][build-status-svg]][build-status-url]
+[![Lint Status][lint-status-svg]][lint-status-url]
 [![Go Report Card][goreport-svg]][goreport-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
 [![License][license-svg]][license-url]
@@ -128,7 +129,9 @@ If you have questions or support, please use the following resources:
 * GitHub: https://github.com/grokify/ringcentral-permahooks/issues
 
  [build-status-svg]: https://github.com/grokify/ringcentral-permahooks/workflows/test/badge.svg
- [build-status-url]: https://github.com/grokify/ringcentral-permahooks/actions
+ [build-status-url]: https://github.com/grokify/ringcentral-permahooks/actions/workflows/test.yaml
+ [lint-status-svg]: https://github.com/grokify/ringcentral-permahooks/workflows/lint/badge.svg
+ [lint-status-url]: https://github.com/grokify/ringcentral-permahooks/actions/workflows/lint.yaml
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/ringcentral-permahooks
  [goreport-url]: https://goreportcard.com/report/github.com/grokify/ringcentral-permahooks
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/ringcentral-permahooks
