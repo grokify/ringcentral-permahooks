@@ -5,7 +5,7 @@ go 1.23.2
 require (
 	github.com/buaazp/fasthttprouter v0.1.1
 	github.com/grokify/go-ringcentral-client v0.3.26
-	github.com/grokify/goauth v0.23.3
+	github.com/grokify/goauth v0.23.5
 	github.com/grokify/mogo v0.67.9
 	github.com/grokify/sogo v0.10.1
 	github.com/joho/godotenv v1.5.1
