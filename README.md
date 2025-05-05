@@ -128,9 +128,9 @@ If you have questions or support, please use the following resources:
 * Stack Overflow: https://stackoverflow.com/questions/tagged/ringcentral
 * GitHub: https://github.com/grokify/ringcentral-permahooks/issues
 
- [build-status-svg]: https://github.com/grokify/ringcentral-permahooks/workflows/test/badge.svg
- [build-status-url]: https://github.com/grokify/ringcentral-permahooks/actions/workflows/test.yaml
- [lint-status-svg]: https://github.com/grokify/ringcentral-permahooks/workflows/lint/badge.svg
+ [build-status-svg]: https://github.com/grokify/ringcentral-permahooks/actions/workflows/ci.yaml/badge.svg?branch=master
+ [build-status-url]: https://github.com/grokify/ringcentral-permahooks/actions/workflows/ci.yaml
+ [lint-status-svg]: https://github.com/grokify/ringcentral-permahooks/actions/workflows/lint.yaml/badge.svg?branch=master
  [lint-status-url]: https://github.com/grokify/ringcentral-permahooks/actions/workflows/lint.yaml
  [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/ringcentral-permahooks
  [goreport-url]: https://goreportcard.com/report/github.com/grokify/ringcentral-permahooks
