@@ -5,9 +5,9 @@ go 1.24.0
 require (
 	github.com/buaazp/fasthttprouter v0.1.1
 	github.com/grokify/go-ringcentral-client v0.3.32
-	github.com/grokify/goauth v0.23.26
-	github.com/grokify/mogo v0.71.9
-	github.com/grokify/sogo v0.12.10
+	github.com/grokify/goauth v0.23.27
+	github.com/grokify/mogo v0.71.10
+	github.com/grokify/sogo v0.12.11
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/zerolog v1.34.0
 )
@@ -47,14 +47,14 @@ require (
 	go.opentelemetry.io/otel v1.38.0 // indirect
 	go.opentelemetry.io/otel/metric v1.38.0 // indirect
 	go.opentelemetry.io/otel/trace v1.38.0 // indirect
-	golang.org/x/crypto v0.44.0 // indirect
-	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/exp v0.0.0-20251113190631-e25ba8c21ef6 // indirect
 	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/oauth2 v0.33.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.31.0 // indirect
 	google.golang.org/api v0.256.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251111163417-95abcf5c77ba // indirect
-	google.golang.org/grpc v1.76.0 // indirect
+	google.golang.org/grpc v1.77.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 )
