@@ -6,8 +6,8 @@ require (
 	github.com/buaazp/fasthttprouter v0.1.1
 	github.com/grokify/go-ringcentral-client v0.3.32
 	github.com/grokify/goauth v0.23.26
-	github.com/grokify/mogo v0.71.9
-	github.com/grokify/sogo v0.12.10
+	github.com/grokify/mogo v0.72.0
+	github.com/grokify/sogo v0.12.12
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/zerolog v1.34.0
 )
@@ -47,8 +47,8 @@ require (
 	go.opentelemetry.io/otel v1.38.0 // indirect
 	go.opentelemetry.io/otel/metric v1.38.0 // indirect
 	go.opentelemetry.io/otel/trace v1.38.0 // indirect
-	golang.org/x/crypto v0.44.0 // indirect
-	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/exp v0.0.0-20251125195548-87e1e737ad39 // indirect
 	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/oauth2 v0.33.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
