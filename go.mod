@@ -9,7 +9,7 @@ require (
 	github.com/grokify/mogo v0.74.1
 	github.com/grokify/sogo v0.14.0
 	github.com/joho/godotenv v1.5.1
-	github.com/rs/zerolog v1.35.0
+	github.com/rs/zerolog v1.35.1
 )
 
 require (
